@@ -130,7 +130,12 @@ def chunk_text(text: str, max_chars: int = 1400, overlap_chars: int = 180) -> li
 
         if current:
             chunks.append(current)
-            overlap = current[-overlap_chars:].lstrip()
+            overlap_start = max(0, len(current) - overlap_chars)
+            if overlap_start > 0:
+                while overlap_start < len(current) and not current[overlap_start - 1].isspace():
+                    overlap_start += 1
+
+            overlap = current[overlap_start:].lstrip()
             current = f"{overlap}\n{unit}" if overlap else unit
         else:
             chunks.append(unit[:max_chars])
@@ -175,6 +180,7 @@ def crawl(start_url: str, max_pages: int, delay: float, timeout: float) -> list[
         if content_type and content_type not in HTML_CONTENT_TYPES:
             continue
 
+        response.encoding = response.apparent_encoding
         page, links = extract_page(final_url, response.text)
         if page.text:
             pages.append(page)

@@ -1,0 +1,28 @@
+.ronbot-launcher {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+
+  width: 140px;
+  height: 140px;
+
+  padding: 0;
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+
+.ronbot-launcher:hover {
+  transform: scale(1.08);
+}
+
+.ronbot-launcher img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  mix-blend-mode: screen;
+}

@@ -57,6 +57,10 @@ def normalise_url(url: str) -> str | None:
 
     # Canonicalise onto the public www hostname and HTTPS.
     path = parsed.path or "/"
+
+    if path.lower() == "/index.html":
+        path = "/"
+
     if path != "/" and path.endswith("/"):
         path = path[:-1]
 

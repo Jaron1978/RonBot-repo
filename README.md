@@ -33,8 +33,8 @@ See [docs/personality.md](docs/personality.md) for the RON-03 personality and re
 | --- | --- | --- |
 | RON-02 | Define frontend, API, AI and website knowledge architecture | Complete |
 | RON-03 | Define RonBot personality and response style | Complete |
-| RON-04 | Create production RonBot character | In progress |
-
+| RON-04 | Create production RonBot character | Complete |
+| RON-05 | Build local RonBot chat interface | Complete | 
 ## Repository structure
 
 ```text
@@ -48,7 +48,14 @@ RonBot-repo/
 │   └── ronbot/
 │       └── README.md
 ├── frontend/
+│   ├── assets/
+│   │   └── ronbot-production.png
+│   ├── ronbot-widget.html
+│   ├── ronbot.css
+│   └── ronbot.js
 ├── backend/
+│   ├── answer.py
+│   └── retrieve.py
 └── infrastructure/
 ```
 

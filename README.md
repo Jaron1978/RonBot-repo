@@ -54,7 +54,25 @@ The local implementation introduced:
 
 This stage provided a local environment in which the frontend, retrieval behaviour and answer flow could be developed and tested before AWS deployment.
 
-RON-06, animation and interaction, remains a separate future task and is not marked complete.
+## RON-06 — Animation & interaction
+
+RON-06 added the interaction and animation layer to the local RonBot prototype.
+
+The implementation includes:
+
+- Hover feedback on the Robot Ron launcher.
+- Animated opening and closing of the chat panel.
+- Click-to-open and click-to-close launcher behaviour.
+- A dedicated close button and ARIA open/closed state.
+- User message bubbles and automatic conversation scrolling.
+- A purposeful thinking state in which Robot Ron animates only while a response is being prepared.
+- An animated **RonBot is thinking...** indicator.
+- Improved message spacing and a more compact chat-panel layout.
+- `prefers-reduced-motion` handling for visitors who disable motion.
+
+An early continuous idle animation was intentionally removed after testing because it was distracting during conversation. Motion is now used as feedback rather than decoration.
+
+The response currently shown by the prototype is still a temporary local test response. Connecting the frontend to the production retrieval/API path is handled by later project tasks.
 
 ## RON-07 — Website knowledge ingestion
 
@@ -101,9 +119,13 @@ These issues and fixes form part of the engineering record for the project rathe
 | RON-03 | Define RonBot personality and response style | Complete |
 | RON-04 | Create production RonBot character | Complete |
 | RON-05 | Build local RonBot chat interface | Complete |
-| RON-06 | Animation and interaction | Not started |
+| RON-06 | Animation and interaction | Complete |
 | RON-07 | Build website knowledge ingestion | Complete |
 | RON-08 | Prepare and validate local knowledge retrieval | Complete |
+
+**Project progress: 8 / 24 tasks complete**
+
+**Next task:** RON-09 — Unknown-answer Contact fallback
 
 ## Repository structure
 
@@ -129,4 +151,4 @@ RonBot-repo/
 └── infrastructure/
 ```
 
-The repository now contains the local RonBot frontend and retrieval/answer prototype. The infrastructure directory remains available for the later AWS deployment stages.
+The repository now contains the local RonBot frontend, interaction layer and retrieval/answer prototype. The infrastructure directory remains available for the later AWS deployment stages.

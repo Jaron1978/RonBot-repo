@@ -26,3 +26,248 @@
   display: block;
   mix-blend-mode: screen;
 }
+
+/* RON-06: idle animation */
+
+@keyframes ronbot-idle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/*Floating launcher.ronbot-launcher img {
+  animation: ronbot-idle 3s ease-in-out infinite;
+}
+*/
+
+/* RON-06: click interaction */
+
+.ronbot-launcher.ronbot-active {
+  transform: scale(1.12) rotate(-3deg);
+}
+
+/* RON-06: chat panel */
+
+.ronbot-chat-panel {
+  position: fixed;
+  right: 32px;
+  bottom: 190px;
+
+  width: 360px;
+  max-width: calc(100vw - 40px);
+
+  background: #111827;
+  color: white;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+
+  overflow: hidden;
+
+  opacity: 0;
+  transform: translateY(20px) scale(0.96);
+  pointer-events: none;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.ronbot-chat-panel.ronbot-chat-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.ronbot-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 18px;
+
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ronbot-chat-header div {
+  display: flex;
+  flex-direction: column;
+}
+
+.ronbot-chat-header span {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.ronbot-close {
+  border: none;
+  background: transparent;
+  color: white;
+
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.ronbot-chat-messages {
+  min-height: 180px;
+  max-height: 320px;
+
+  padding: 18px;
+  overflow-y: auto;
+}
+
+.ronbot-message {
+  max-width: 85%;
+  padding: 12px 14px;
+
+  border-radius: 14px;
+  line-height: 1.4;
+}
+
+.ronbot-message-bot {
+  margin-right: auto;
+  margin-bottom: 10px;
+
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.ronbot-chat-form {
+  display: flex;
+  gap: 8px;
+
+  padding: 14px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ronbot-chat-form input {
+  flex: 1;
+
+  padding: 11px 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.07);
+  color: white;
+}
+
+.ronbot-chat-form button {
+  padding: 10px 16px;
+
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+
+/* RON-06: user message */
+
+.ronbot-message-user {
+  margin-left: auto;
+  margin-top: 14px;
+  margin-bottom: 4px;
+
+  background: rgba(59, 130, 246, 0.25);
+}
+
+/* RON-06: thinking animation */
+
+@keyframes ronbot-thinking {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-4deg);
+  }
+
+  75% {
+    transform: rotate(4deg);
+  }
+}
+
+.ronbot-launcher.ronbot-thinking img {
+  animation: ronbot-thinking 0.7s ease-in-out infinite;
+}
+
+/* RON-06: animated thinking indicator */
+
+.ronbot-thinking-message {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ronbot-dots span {
+  display: inline-block;
+  animation: ronbot-dot-pulse 1.2s infinite;
+}
+
+.ronbot-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.ronbot-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes ronbot-dot-pulse {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+/* RON-06: accessibility - respect reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  .ronbot-launcher,
+  .ronbot-launcher img,
+  .ronbot-chat-panel,
+  .ronbot-dots span {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.ronbot-message {
+  max-width: 85%;
+  padding: 12px 14px;
+
+  border-radius: 14px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+
+  margin-bottom: 8px;
+}
+
+.ronbot-message-user {
+  margin-left: auto;
+  margin-top: 14px;
+  margin-bottom: 4px;
+
+  background: rgba(59, 130, 246, 0.25);
+}
+
+.ronbot-message-bot {
+  margin-right: auto;
+  margin-bottom: 10px;
+
+  background: rgba(255, 255, 255, 0.09);
+}

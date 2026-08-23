@@ -27,21 +27,83 @@ RonBot is friendly, professional, concise and technically capable. Accuracy take
 
 See [docs/personality.md](docs/personality.md) for the RON-03 personality and response specification.
 
+## RON-04 — Production RonBot character
+
+RON-04 established the production visual identity for RonBot. Rather than using a generic chatbot icon, the project uses a distinctive **Robot Ron** character designed to make the assistant recognisable as part of the portfolio experience.
+
+The production character incorporates visual references to the technologies and learning behind the portfolio, including an AWS hoodie, Redpanda T-shirt, Azure beanie, Google-branded khaki trousers and study material carried under his arm.
+
+The production artwork is stored at:
+
+`frontend/assets/ronbot-production.png`
+
+See [docs/ronbot-character.md](docs/ronbot-character.md) for the character specification.
+
+## RON-05 — Local RonBot chat interface
+
+RON-05 moved RonBot from design and planning into a working local prototype.
+
+The local implementation introduced:
+
+- `frontend/ronbot-widget.html` — the local chat interface.
+- `frontend/ronbot.css` — RonBot-specific presentation and layout.
+- `frontend/ronbot.js` — frontend interaction logic.
+- `backend/retrieve.py` — retrieval logic for finding relevant website knowledge.
+- `backend/answer.py` — response-generation logic using retrieved website content.
+- `frontend/assets/ronbot-production.png` — the production Robot Ron artwork used by the interface.
+
+This stage provided a local environment in which the frontend, retrieval behaviour and answer flow could be developed and tested before AWS deployment.
+
+RON-06, animation and interaction, remains a separate future task and is not marked complete.
+
+## RON-07 — Website knowledge ingestion
+
+RON-07 implemented the process used to turn the public portfolio website into a local RonBot knowledge source.
+
+The ingestion tooling crawls `ron-jackson.co.uk` and extracts website content into a structured JSONL knowledge base. The resulting data gives RonBot a controlled source from which relevant information can be retrieved rather than allowing it to answer from unrestricted external knowledge.
+
+The ingestion work included:
+
+- Building `ingest_site.py`.
+- Crawling the portfolio's same-site HTML pages.
+- Extracting useful page text into structured knowledge chunks.
+- Preserving source information so retrieved content remains traceable to the website.
+- Generating `ronbot_knowledge.jsonl` for local retrieval.
+- Verifying that website details were present in the generated knowledge data.
+
+A successful ingestion run visited **39 pages** and produced approximately **56,000 tokens** of website-grounded content.
+
+The ingestion boundary deliberately keeps RonBot focused on the portfolio website rather than crawling external destinations such as GitHub, LinkedIn or other linked services.
+
+## RON-08 — Knowledge preparation and local retrieval
+
+RON-08 prepared the ingested website knowledge for use by the local RonBot retrieval and answer pipeline.
+
+This stage validated that the generated knowledge base could be searched locally and that relevant website content could be supplied to the answer layer. The objective is to ensure that RonBot's responses remain grounded in retrieved portfolio content and that insufficient website evidence results in a safe fallback rather than an invented answer.
+
+RON-07 and RON-08 also produced useful development lessons while establishing the local Python environment. Troubleshooting included:
+
+- Correcting indentation and tab/space issues in the ingestion script.
+- Handling website character encoding using `response.apparent_encoding`.
+- Diagnosing a broken `.venv` whose Python symlinks pointed to an unavailable Python installation.
+- Repairing the Homebrew Python environment.
+- Recreating the virtual environment.
+- Installing project dependencies with `python3 -m pip`.
+- Standardising local Mac commands on `python3` rather than `python`.
+
+These issues and fixes form part of the engineering record for the project rather than being treated simply as setup problems: they document how the local ingestion and retrieval environment was made repeatable and functional.
+
 ## Current progress
 
 | Task | Description | Status |
 | --- | --- | --- |
-| RON-01 | Requirements & knowledge boundary | Complete |
 | RON-02 | Define frontend, API, AI and website knowledge architecture | Complete |
 | RON-03 | Define RonBot personality and response style | Complete |
 | RON-04 | Create production RonBot character | Complete |
 | RON-05 | Build local RonBot chat interface | Complete |
-| RON-07 | Build and validate website knowledge source | Complete |
-| RON-08 | Enforce website-only grounding | Complete |
-
-**Project progress: 7 / 24 tasks complete**
-
-**Next task:** RON-06 — Animation & Interaction
+| RON-06 | Animation and interaction | Not started |
+| RON-07 | Build website knowledge ingestion | Complete |
+| RON-08 | Prepare and validate local knowledge retrieval | Complete |
 
 ## Repository structure
 
@@ -67,21 +129,4 @@ RonBot-repo/
 └── infrastructure/
 ```
 
-The frontend and backend directories now contain the local RON-05 implementation. The infrastructure directory is reserved for the later AWS deployment stages.
-
-## Links & project information
-
-- **Portfolio website:** [www.ron-jackson.co.uk](https://www.ron-jackson.co.uk/)
-- **RonBot project page:** [Project 02 — RonBot](https://www.ron-jackson.co.uk/project-02.html)
-- **GitHub repository:** [Jaron1978/RonBot-repo](https://github.com/Jaron1978/RonBot-repo)
-
-### Current implementation status
-
-RonBot is currently in local development. The browser-based chat interface, production RonBot character, Python retrieval components and website knowledge ingestion pipeline are in place.
-
-The knowledge source is deliberately restricted to content published on Ron's portfolio website. External domains such as GitHub, LinkedIn and Credly are excluded from RonBot's knowledge source.
-
-If RonBot cannot find sufficient information in the website knowledge base to answer a question accurately, it should not guess. Instead, the visitor is directed to the portfolio Contact page.
-
-Production AWS deployment and live website integration will be completed in later project tasks.
-
+The repository now contains the local RonBot frontend and retrieval/answer prototype. The infrastructure directory remains available for the later AWS deployment stages.

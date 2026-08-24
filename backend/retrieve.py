@@ -9,7 +9,7 @@ KNOWLEDGE_FILE = (
     / "ronbot_knowledge.jsonl"
 )
 
-
+MIN_RELEVANCE_SCORE = 3
 def load_knowledge():
     """Load RonBot's website-only knowledge base."""
     chunks = []
@@ -31,16 +31,57 @@ STOP_WORDS = {
     "when", "where", "who", "with"
 }
 
+QUERY_EXPANSIONS = {
+    # Names
+    "called": {"name", "named", "names"},
+    "named": {"name", "called", "names"},
+    "name": {"named", "called", "names"},
+    "names": {"name", "named", "called"},
+
+    # Education
+    "study": {"studying", "studies", "education", "degree", "university", "bsc", "computing"},
+    "studying": {"study", "studies", "education", "degree", "university", "bsc", "computing"},
+    "studies": {"study", "studying", "education", "degree", "university", "bsc", "computing"},
+    "degree": {"education", "university", "bsc", "computing", "studying"},
+
+    # Current employment
+    "job": {"work", "role", "engineer", "employment", "career"},
+    "work": {"job", "role", "engineer", "employment", "career"},
+    "role": {"job", "work", "engineer", "employment", "career"},
+
+    # Previous employment
+    "before": {"previous", "prior"},   
+    "previous": {"before", "prior"},
+    "prior": {"before", "previous"},
+
+   # School / secondary education
+    "school": {"education", "secondary", "academy", "stewards", "gcse"},
+    "secondary": {"school", "education", "academy", "stewards", "gcse"},
+    "academy": {"school", "secondary", "education", "stewards", "gcse"},
+    "gcse": {"gcses", "education", "secondary", "school", "qualifications"},
+    "gcses": {"gcse", "education", "secondary", "school", "qualifications"},
+}
+
+
+NAMING_WORDS = {"called", "name", "named", "names"}
 
 def tokenize(text):
     """Convert text into useful searchable words."""
     words = re.findall(r"[a-z0-9]+", text.lower())
 
-    return {
+    tokens = {
         word
         for word in words
         if word not in STOP_WORDS and len(word) > 1
     }
+
+    expanded_tokens = set(tokens)
+
+    for token in tokens:
+        expanded_tokens.update(QUERY_EXPANSIONS.get(token, set()))
+
+    return expanded_tokens
+    
 
 def score_chunk(question, chunk):
     """Score a knowledge chunk against the user's question."""
@@ -51,7 +92,43 @@ def score_chunk(question, chunk):
     text_matches = len(question_words & chunk_words)
     title_matches = len(question_words & title_words)
 
-    return text_matches + (title_matches * 3)
+    naming_bonus = 0
+    relationship_bonus = 0
+    skills_bonus = 0
+
+    question_lower = question.lower()
+    chunk_text = chunk.get("text", "")
+    chunk_text_lower = chunk_text.lower()
+
+    # Broad skills questions should favour Work Experience
+    # and Certifications rather than unrelated website pages.
+    if "skill" in question_lower or "skills" in question_lower:
+        title_lower = chunk.get("title", "").lower()
+
+        if "work experience" in title_lower:
+            skills_bonus = 5
+
+        elif "certifications" in title_lower:
+            skills_bonus = 4
+
+    # Questions about Ron's role before joining Redpanda.
+    if "before redpanda" in question_lower:
+        if "redpanda" in chunk_text_lower and "nexxen" in chunk_text_lower:
+            relationship_bonus = 6
+    if any(word in question_lower for word in NAMING_WORDS):
+        if "dogs" in question_words and re.search(
+            r"\bdogs\b.{0,50}\b[A-Z][a-z]+\s+and\s+[A-Z][a-z]+\b",
+            chunk_text
+        ):
+            naming_bonus = 3
+
+    return (
+        text_matches
+        + (title_matches * 3)
+        + naming_bonus
+        + relationship_bonus
+        + skills_bonus
+    )
 
 def retrieve(question, chunks, limit=3):
     """Return the strongest website chunks for a question."""
@@ -60,7 +137,7 @@ def retrieve(question, chunks, limit=3):
     for chunk in chunks:
         score = score_chunk(question, chunk)
 
-        if score > 0:
+        if score >= MIN_RELEVANCE_SCORE:
             scored.append((score, chunk))
 
     scored.sort(key=lambda item: item[0], reverse=True)

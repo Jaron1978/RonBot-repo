@@ -111,6 +111,30 @@ RON-07 and RON-08 also produced useful development lessons while establishing th
 
 These issues and fixes form part of the engineering record for the project rather than being treated simply as setup problems: they document how the local ingestion and retrieval environment was made repeatable and functional.
 
+## RON-09 — Grounded answers and unknown-answer fallback
+
+RON-09 strengthened RonBot's local retrieval and answer pipeline so that supported questions produce concise, website-grounded responses while unsupported questions safely direct the visitor to Ron's Contact page.
+
+The implementation expanded both `backend/retrieve.py` and `backend/answer.py` to improve natural-language matching and conversational response handling.
+
+Work completed during this stage included:
+
+- Added targeted query expansion for common website questions.
+- Improved retrieval for education, employment, certifications, personal interests and skills.
+- Added conversational answers for Ron's dogs, current Open University study, secondary education, GCSEs, current role and previous employer.
+- Distinguished cloud-certification questions from broader certification questions.
+- Added a website-grounded summary for broad skills questions.
+- Added multi-chunk handling where the required evidence was not contained in the highest-ranked chunk.
+- Preserved the website-only knowledge boundary.
+- Preserved the Contact-page fallback when the website does not contain sufficient evidence.
+- Verified that unsupported questions such as Ron's favourite food and the breed of his dogs are not guessed.
+
+A final regression test covered **11 representative questions**, including supported and deliberately unsupported queries.
+
+**Regression result: 11 / 11 passed.**
+
+This establishes a stable local baseline for RonBot's website-grounded retrieval and answer behaviour before later frontend/API and AWS integration work.
+
 ## Current progress
 
 | Task | Description | Status |
@@ -122,10 +146,11 @@ These issues and fixes form part of the engineering record for the project rathe
 | RON-06 | Animation and interaction | Complete |
 | RON-07 | Build website knowledge ingestion | Complete |
 | RON-08 | Prepare and validate local knowledge retrieval | Complete |
+| RON-09 | Grounded answers and unknown-answer Contact fallback | Complete |
 
-**Project progress: 8 / 24 tasks complete**
+**Project progress: 9 / 25 tasks complete**
 
-**Next task:** RON-09 — Unknown-answer Contact fallback
+**New planned task:** Production cost monitoring & FinOps — measure RonBot's AWS and AI operating costs, maintain budget alerts, establish a monthly cost baseline and document optimisation opportunities.
 
 ## Repository structure
 

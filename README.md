@@ -148,9 +148,7 @@ This establishes a stable local baseline for RonBot's website-grounded retrieval
 | RON-08 | Prepare and validate local knowledge retrieval | Complete |
 | RON-09 | Grounded answers and unknown-answer Contact fallback | Complete |
 
-**Project progress: 9 / 25 tasks complete**
-
-**New planned task:** Production cost monitoring & FinOps — measure RonBot's AWS and AI operating costs, maintain budget alerts, establish a monthly cost baseline and document optimisation opportunities.
+**Project progress: 9 / 24 tasks complete**
 
 ## Repository structure
 

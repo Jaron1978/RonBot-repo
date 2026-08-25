@@ -67,24 +67,9 @@ Current Local Architecture
 
 ![RonBot Current Local Architecture](ronbot-current-local-architecture.png)
 
-Planned AWS Architecture
+Planned Local Architecture
 
-Portfolio Website
-        │
-        ▼
-Amazon API Gateway
-        │
-        ▼
-AWS Lambda
-        │
-        ▼
-Amazon Bedrock
-        │
-        ▼
-Bedrock Knowledge Base
-        │
-        ▼
-Amazon S3 / S3 Vectors
+![RonBot Planned AWS Architecture](Planned_AWS.png)
 
 The production architecture is designed around a low-cost, serverless AWS model.
 

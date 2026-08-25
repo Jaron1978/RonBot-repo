@@ -65,24 +65,7 @@ Architecture
 
 Current Local Architecture
 
-ron-jackson.co.uk
-        │
-        ▼
- Website Ingestion
-        │
-        ▼
-ronbot_knowledge.jsonl
-        │
-        ▼
- Local Retrieval
- backend/retrieve.py
-        │
-        ▼
- Grounded Answer Layer
- backend/answer.py
-        │
-        ▼
- RonBot Frontend
+![RonBot Current Local Architecture](ronbot-current-local-architecture.png)
 
 Planned AWS Architecture
 

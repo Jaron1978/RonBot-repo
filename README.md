@@ -4,6 +4,10 @@ RonBot is an AI-powered portfolio assistant for ron-jackson.co.uk, designed to h
 
 Unlike a general-purpose chatbot, RonBot is deliberately website-grounded. Answers must be supported by approved portfolio content. If the website does not contain enough information to answer accurately, RonBot does not guess.
 
+<p align="center">
+  <img src="frontend/assets/ronbot-production.png" alt="RonBot — Portfolio AI Assistant" width="320">
+</p>
+
 If it’s on Ron’s website, I can talk about it. If it isn’t, I don’t make it up.
 
 Project Overview

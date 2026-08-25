@@ -1,158 +1,248 @@
-# RonBot
+🤖 RonBot — Portfolio AI Assistant
 
-RonBot is an AI assistant for [ron-jackson.co.uk](https://ron-jackson.co.uk), designed to help visitors explore Ron Jackson's professional experience, skills, education, certifications and technical projects through natural conversation.
+RonBot is an AI-powered portfolio assistant for ron-jackson.co.uk, designed to help visitors explore Ron Jackson’s professional experience, skills, education, certifications and technical projects through natural conversation.
 
-RonBot is deliberately **website-grounded**: it should answer from the portfolio knowledge base rather than behave as a general-purpose chatbot. If the website does not contain enough information to answer accurately, RonBot directs the visitor to the Contact Ron page.
+Unlike a general-purpose chatbot, RonBot is deliberately website-grounded. Answers must be supported by approved portfolio content. If the website does not contain enough information to answer accurately, RonBot does not guess.
 
-## Project goals
+If it’s on Ron’s website, I can talk about it. If it isn’t, I don’t make it up.
 
-- Build a distinctive Robot Ron frontend experience rather than a generic chat widget.
-- Use a low-cost, serverless AWS architecture.
-- Ground answers in approved portfolio content using retrieval-augmented generation (RAG).
-- Adapt response depth for recruiters, general visitors and technical users.
-- Avoid unsupported claims and hallucinated information about Ron.
-- Make the project useful both as a portfolio feature and as an AWS/AI engineering project.
+Project Overview
 
-## Planned architecture
+RonBot began as an idea for a more engaging alternative to a conventional website chatbot and is being developed incrementally into an AI-powered interface for the portfolio.
 
-`Portfolio Website -> API Gateway HTTP API -> AWS Lambda -> Amazon Bedrock + Bedrock Knowledge Base -> Amazon S3 / S3 Vectors`
+The project combines:
 
-See [docs/architecture.md](docs/architecture.md) for the RON-02 architecture decision.
+* A distinctive Robot Ron frontend experience
+* Website content ingestion and knowledge preparation
+* Local information retrieval
+* Grounded answer generation
+* Unknown-answer guardrails
+* Conversational frontend interaction
+* Planned AWS serverless deployment
+* Planned RAG and semantic retrieval
+* Longer-term evolution into a Portfolio AI Agent
 
-## RonBot behaviour
+The project is intentionally being built in stages so that retrieval quality, grounding and user experience can be validated before introducing production AI services.
 
-RonBot is friendly, professional, concise and technically capable. Accuracy takes priority over personality. Its core rule is:
+Current Capabilities
 
-> **If it's on Ron's website, I can talk about it. If it isn't, I don't make it up.**
+The local RonBot prototype can currently:
 
-See [docs/personality.md](docs/personality.md) for the RON-03 personality and response specification.
+* Crawl the public portfolio and build a structured knowledge source
+* Search approximately 56,000 tokens of website-derived content
+* Retrieve relevant portfolio information for natural-language questions
+* Answer questions about experience, education, certifications, skills and selected personal information published on the website
+* Combine evidence from multiple knowledge chunks when required
+* Distinguish specific queries such as cloud certifications from broader certification questions
+* Refuse to invent answers when the website does not contain sufficient evidence
+* Direct unsupported questions to the Contact page
+* Provide an animated conversational frontend
+* Respect prefers-reduced-motion accessibility settings
 
-## RON-04 — Production RonBot character
+A representative regression suite currently passes:
 
-RON-04 established the production visual identity for RonBot. Rather than using a generic chatbot icon, the project uses a distinctive **Robot Ron** character designed to make the assistant recognisable as part of the portfolio experience.
+11 / 11 grounded-answer tests
 
-The production character incorporates visual references to the technologies and learning behind the portfolio, including an AWS hoodie, Redpanda T-shirt, Azure beanie, Google-branded khaki trousers and study material carried under his arm.
+Grounding Principle
+
+Accuracy takes priority over personality.
+
+RonBot is designed around a strict knowledge boundary:
+
+Portfolio Website → RonBot Knowledge Base → Retrieval → Answer
+
+External websites linked from the portfolio are not automatically treated as knowledge sources.
+
+Questions that cannot be supported by retrieved website evidence result in a safe fallback rather than a fabricated answer.
+
+This behaviour is fundamental to the project and will remain in place as RonBot moves toward production AI services.
+
+Architecture
+
+Current Local Architecture
+
+ron-jackson.co.uk
+        │
+        ▼
+ Website Ingestion
+        │
+        ▼
+ronbot_knowledge.jsonl
+        │
+        ▼
+ Local Retrieval
+ backend/retrieve.py
+        │
+        ▼
+ Grounded Answer Layer
+ backend/answer.py
+        │
+        ▼
+ RonBot Frontend
+
+Planned AWS Architecture
+
+Portfolio Website
+        │
+        ▼
+Amazon API Gateway
+        │
+        ▼
+AWS Lambda
+        │
+        ▼
+Amazon Bedrock
+        │
+        ▼
+Bedrock Knowledge Base
+        │
+        ▼
+Amazon S3 / S3 Vectors
+
+The production architecture is designed around a low-cost, serverless AWS model.
+
+See docs/architecture.md for the RON-02 architecture decision and technical rationale.
+
+Technologies
+
+Development: Python · HTML · CSS · JavaScript
+AI / Retrieval: RAG · Information Retrieval · Grounded Q&A · Semantic Search (planned)
+AWS: API Gateway · Lambda · Amazon Bedrock · Bedrock Knowledge Bases · Amazon S3
+Engineering: Git · GitHub · JSONL · Web Content Ingestion
+
+Robot Ron
+
+RonBot deliberately avoids the appearance of a generic support chatbot.
+
+RON-04 established a dedicated Robot Ron character as the visual identity of the assistant and as a recognisable part of the wider portfolio experience.
 
 The production artwork is stored at:
 
-`frontend/assets/ronbot-production.png`
+frontend/assets/ronbot-production.png
 
-See [docs/ronbot-character.md](docs/ronbot-character.md) for the character specification.
+See docs/ronbot-character.md for the full character specification.
 
-## RON-05 — Local RonBot chat interface
+Interaction Design
 
-RON-05 moved RonBot from design and planning into a working local prototype.
+RON-05 and RON-06 established the local conversational interface.
 
-The local implementation introduced:
+The frontend currently includes:
 
-- `frontend/ronbot-widget.html` — the local chat interface.
-- `frontend/ronbot.css` — RonBot-specific presentation and layout.
-- `frontend/ronbot.js` — frontend interaction logic.
-- `backend/retrieve.py` — retrieval logic for finding relevant website knowledge.
-- `backend/answer.py` — response-generation logic using retrieved website content.
-- `frontend/assets/ronbot-production.png` — the production Robot Ron artwork used by the interface.
+* Robot Ron launcher
+* Click-to-open and close behaviour
+* Animated chat panel
+* User and RonBot message bubbles
+* Automatic conversation scrolling
+* Purposeful thinking animation
+* RonBot is thinking... state
+* ARIA open/closed state
+* Reduced-motion accessibility handling
 
-This stage provided a local environment in which the frontend, retrieval behaviour and answer flow could be developed and tested before AWS deployment.
+An early continuous idle animation was intentionally removed after testing because it became distracting during conversation.
 
-## RON-06 — Animation & interaction
+Motion is therefore used primarily as feedback rather than decoration.
 
-RON-06 added the interaction and animation layer to the local RonBot prototype.
+Website Knowledge Pipeline
 
-The implementation includes:
+RON-07 introduced the ingestion process used to turn the public portfolio into a controlled local knowledge source.
 
-- Hover feedback on the Robot Ron launcher.
-- Animated opening and closing of the chat panel.
-- Click-to-open and click-to-close launcher behaviour.
-- A dedicated close button and ARIA open/closed state.
-- User message bubbles and automatic conversation scrolling.
-- A purposeful thinking state in which Robot Ron animates only while a response is being prepared.
-- An animated **RonBot is thinking...** indicator.
-- Improved message spacing and a more compact chat-panel layout.
-- `prefers-reduced-motion` handling for visitors who disable motion.
+The ingestion tooling:
 
-An early continuous idle animation was intentionally removed after testing because it was distracting during conversation. Motion is now used as feedback rather than decoration.
+1. Crawls same-site HTML pages from ron-jackson.co.uk
+2. Extracts useful website text
+3. Creates structured knowledge chunks
+4. Preserves source information
+5. Generates ronbot_knowledge.jsonl
+6. Makes that content available to the retrieval layer
 
-The response currently shown by the prototype is still a temporary local test response. Connecting the frontend to the production retrieval/API path is handled by later project tasks.
+A successful ingestion run visited 39 pages and generated approximately 56,000 tokens of website-grounded content.
 
-## RON-07 — Website knowledge ingestion
+External destinations such as GitHub, LinkedIn and other linked websites remain outside the ingestion boundary.
 
-RON-07 implemented the process used to turn the public portfolio website into a local RonBot knowledge source.
+Retrieval & Grounded Answers
 
-The ingestion tooling crawls `ron-jackson.co.uk` and extracts website content into a structured JSONL knowledge base. The resulting data gives RonBot a controlled source from which relevant information can be retrieved rather than allowing it to answer from unrestricted external knowledge.
+RON-08 and RON-09 established the current local retrieval and answer baseline.
 
-The ingestion work included:
+Development included:
 
-- Building `ingest_site.py`.
-- Crawling the portfolio's same-site HTML pages.
-- Extracting useful page text into structured knowledge chunks.
-- Preserving source information so retrieved content remains traceable to the website.
-- Generating `ronbot_knowledge.jsonl` for local retrieval.
-- Verifying that website details were present in the generated knowledge data.
+* Website knowledge preparation
+* Natural-language query matching
+* Targeted query expansion
+* Multi-chunk evidence handling
+* Education and employment retrieval
+* Certification retrieval
+* Skills summaries
+* Selected website-published personal information
+* Unknown-answer detection
+* Contact-page fallback
+* Regression testing
 
-A successful ingestion run visited **39 pages** and produced approximately **56,000 tokens** of website-grounded content.
+Unsupported questions are deliberately included in testing.
 
-The ingestion boundary deliberately keeps RonBot focused on the portfolio website rather than crawling external destinations such as GitHub, LinkedIn or other linked services.
+For example, if the portfolio does not state Ron’s favourite food or the breed of his dogs, RonBot must not infer or invent an answer.
 
-## RON-08 — Knowledge preparation and local retrieval
+Regression Result
 
-RON-08 prepared the ingested website knowledge for use by the local RonBot retrieval and answer pipeline.
+11 / 11 representative questions passed
 
-This stage validated that the generated knowledge base could be searched locally and that relevant website content could be supplied to the answer layer. The objective is to ensure that RonBot's responses remain grounded in retrieved portfolio content and that insufficient website evidence results in a safe fallback rather than an invented answer.
+This provides the stable local baseline from which the production API, AWS and AI integration can be developed.
 
-RON-07 and RON-08 also produced useful development lessons while establishing the local Python environment. Troubleshooting included:
+Engineering Lessons
 
-- Correcting indentation and tab/space issues in the ingestion script.
-- Handling website character encoding using `response.apparent_encoding`.
-- Diagnosing a broken `.venv` whose Python symlinks pointed to an unavailable Python installation.
-- Repairing the Homebrew Python environment.
-- Recreating the virtual environment.
-- Installing project dependencies with `python3 -m pip`.
-- Standardising local Mac commands on `python3` rather than `python`.
+RON-07 and RON-08 also produced several useful troubleshooting lessons while establishing the local Python environment.
 
-These issues and fixes form part of the engineering record for the project rather than being treated simply as setup problems: they document how the local ingestion and retrieval environment was made repeatable and functional.
+Issues investigated and resolved included:
 
-## RON-09 — Grounded answers and unknown-answer fallback
+* Python indentation and tab/space errors
+* Website character encoding
+* A broken .venv
+* Python symlinks pointing to an unavailable installation
+* Multiple local Python installations
+* Homebrew Python repair
+* Virtual environment recreation
+* Dependency installation using python3 -m pip
 
-RON-09 strengthened RonBot's local retrieval and answer pipeline so that supported questions produce concise, website-grounded responses while unsupported questions safely direct the visitor to Ron's Contact page.
+These are retained as part of the engineering record because they demonstrate the diagnosis and resolution required to make the local ingestion and retrieval environment repeatable.
 
-The implementation expanded both `backend/retrieve.py` and `backend/answer.py` to improve natural-language matching and conversational response handling.
+Project Progress
 
-Work completed during this stage included:
+Task	Description	Status
+RON-02	Define frontend, API, AI and website knowledge architecture	✅ Complete
+RON-03	Define RonBot personality and response style	✅ Complete
+RON-04	Create production RonBot character	✅ Complete
+RON-05	Build local RonBot chat interface	✅ Complete
+RON-06	Animation and interaction	✅ Complete
+RON-07	Build website knowledge ingestion	✅ Complete
+RON-08	Prepare and validate local knowledge retrieval	✅ Complete
+RON-09	Grounded answers and unknown-answer fallback	✅ Complete
 
-- Added targeted query expansion for common website questions.
-- Improved retrieval for education, employment, certifications, personal interests and skills.
-- Added conversational answers for Ron's dogs, current Open University study, secondary education, GCSEs, current role and previous employer.
-- Distinguished cloud-certification questions from broader certification questions.
-- Added a website-grounded summary for broad skills questions.
-- Added multi-chunk handling where the required evidence was not contained in the highest-ranked chunk.
-- Preserved the website-only knowledge boundary.
-- Preserved the Contact-page fallback when the website does not contain sufficient evidence.
-- Verified that unsupported questions such as Ron's favourite food and the breed of his dogs are not guessed.
+Further tasks cover frontend/API integration, AWS deployment, production AI integration, testing and the longer-term evolution of RonBot.
 
-A final regression test covered **11 representative questions**, including supported and deliberately unsupported queries.
+Roadmap
 
-**Regression result: 11 / 11 passed.**
+RonBot is being developed through two major stages:
 
-This establishes a stable local baseline for RonBot's website-grounded retrieval and answer behaviour before later frontend/API and AWS integration work.
+RonBot v1 — Website-Grounded AI Assistant
 
-## Current progress
+Deliver a production-ready conversational assistant that allows visitors to explore the portfolio while remaining grounded in approved website content.
 
-| Task | Description | Status |
-| --- | --- | --- |
-| RON-02 | Define frontend, API, AI and website knowledge architecture | Complete |
-| RON-03 | Define RonBot personality and response style | Complete |
-| RON-04 | Create production RonBot character | Complete |
-| RON-05 | Build local RonBot chat interface | Complete |
-| RON-06 | Animation and interaction | Complete |
-| RON-07 | Build website knowledge ingestion | Complete |
-| RON-08 | Prepare and validate local knowledge retrieval | Complete |
-| RON-09 | Grounded answers and unknown-answer Contact fallback | Complete |
+RonBot v2 — Portfolio AI Agent
 
-**Project progress: 9 / 24 tasks complete**
+Evolve RonBot beyond question-and-answer into a controlled portfolio agent capable of helping different visitors explore relevant information and navigate the portfolio intelligently.
 
-## Repository structure
+Potential capabilities include:
 
-```text
+* Recruiter / Hiring Manager / Engineer visitor experiences
+* AI CV exploration
+* Contextual project deep-dives
+* Interactive architecture explanations
+* Semantic portfolio search
+* Controlled portfolio navigation and actions
+
+The traditional portfolio remains available throughout; AI interaction is an optional way to explore it.
+
+Repository Structure
+
 RonBot-repo/
 ├── README.md
 ├── docs/
@@ -172,6 +262,15 @@ RonBot-repo/
 │   ├── answer.py
 │   └── retrieve.py
 └── infrastructure/
-```
 
-The repository now contains the local RonBot frontend, interaction layer and retrieval/answer prototype. The infrastructure directory remains available for the later AWS deployment stages.
+The repository currently contains the local RonBot frontend, interaction layer, website ingestion process and retrieval/answer prototype.
+
+The infrastructure/ directory is reserved for the later AWS deployment stages.
+
+Project Philosophy
+
+RonBot is not intended to demonstrate AI simply by adding a chatbot to a website.
+
+The aim is to build a useful portfolio experience while gaining practical experience with retrieval, grounding, RAG, semantic search, serverless architecture, AI integration and responsible answer behaviour.
+
+Each stage is being implemented, tested and documented before the next layer is introduced.

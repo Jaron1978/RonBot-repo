@@ -6,7 +6,7 @@ from pathlib import Path
 KNOWLEDGE_FILE = (
     Path(__file__).resolve().parent.parent
     / "knowledge"
-    / "ronbot_knowledge.jsonl"
+    / "website.jsonl"
 )
 
 MIN_RELEVANCE_SCORE = 3
@@ -89,16 +89,35 @@ def score_chunk(question, chunk):
     chunk_words = tokenize(chunk.get("text", ""))
     title_words = tokenize(chunk.get("title", ""))
 
+ # In RonBot implementation questions, "work" means how the system functions,
+    # not Ron's employment history.
+    if "ronbot" in question.lower():
+        question_words -= {
+            "job",
+            "role",
+            "engineer",
+            "employment",
+            "career",
+        }
+
     text_matches = len(question_words & chunk_words)
     title_matches = len(question_words & title_words)
 
     naming_bonus = 0
     relationship_bonus = 0
     skills_bonus = 0
+    ronbot_bonus = 0
 
     question_lower = question.lower()
     chunk_text = chunk.get("text", "")
     chunk_text_lower = chunk_text.lower()
+
+    # RonBot questions should favour the dedicated Project 02 page.
+    if "ronbot" in question_lower:
+        title_lower = chunk.get("title", "").lower()
+
+        if "project 02" in title_lower and "ronbot" in title_lower:
+            ronbot_bonus = 8
 
     # Broad skills questions should favour Work Experience
     # and Certifications rather than unrelated website pages.
@@ -121,13 +140,13 @@ def score_chunk(question, chunk):
             chunk_text
         ):
             naming_bonus = 3
-
     return (
         text_matches
         + (title_matches * 3)
         + naming_bonus
         + relationship_bonus
         + skills_bonus
+        + ronbot_bonus
     )
 
 def retrieve(question, chunks, limit=3):

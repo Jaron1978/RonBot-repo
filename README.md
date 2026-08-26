@@ -98,9 +98,9 @@ Built the working HTML, CSS and JavaScript conversational interface.
 Added purposeful interaction states, thinking feedback and reduced-motion accessibility.
 
 **🌐 RON-07 — Website Knowledge Ingestion**  
-Built the website crawler and ingestion pipeline, processing **39 portfolio pages** into approximately **56,000 tokens** of structured knowledge.
+Built the website crawler and ingestion pipeline, processing **12 portfolio pages** into **45 structured knowledge chunks**.
 
-**🔎 RON-08 — Local Retrieval**  
+**🔎 RON-08 — Local Retrieval**
 Prepared and validated the local knowledge retrieval pipeline used to find relevant website evidence.
 
 **🛡️ RON-09 — Grounded Answers & Fallback**  
@@ -111,8 +111,6 @@ Improved query matching, multi-chunk evidence handling and safe unknown-answer b
 **11 / 11 representative questions passed**
 
 Testing includes both supported questions and deliberately unsupported questions to verify that RonBot does not invent information.
-
-Engineering Lessons
 
 ## 💡 Engineering Lessons
 
@@ -134,13 +132,34 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-04 — Production character  
 ✅ RON-05 — Local chat interface  
 ✅ RON-06 — Animation & interaction  
-✅ RON-07 — Website knowledge ingestion  
-✅ RON-08 — Local knowledge retrieval  
+✅ RON-07 — Website knowledge ingestion
+✅ RON-08 — Local knowledge retrieval
 ✅ RON-09 — Grounded answers & safe fallback
+✅ RON-10 — Recruiter & technical answer depth
 
-**Current milestone:** Stable local website-grounded retrieval and answer baseline established.
+**Current milestone:** Adaptive general and technical answer depth established while preserving website-only grounding.
 
-➡️ **Next:** Continue frontend/API integration toward the production AWS implementation.
+➡️ **Next:** RON-11 — RonBot API.
+
+## RON-10 — Recruiter and technical answer depth
+
+RON-10 introduced adaptive answer depth so RonBot can provide concise responses for general visitors while allowing technically focused visitors to ask for deeper implementation detail.
+
+Implemented improvements include:
+
+- Added concise, recruiter-friendly responses for general RonBot questions.
+- Added technical-depth detection for questions about architecture, implementation, retrieval, grounding, ingestion and the knowledge source.
+- Improved retrieval so RonBot implementation questions favour the dedicated Project 02 content rather than unrelated Work Experience content.
+- Resolved ambiguity around phrases such as "How does RonBot work?", where "work" could previously be interpreted as employment history.
+- Preserved website-only grounding and the Contact-page fallback for unsupported questions.
+- Standardised `knowledge/website.jsonl` as the canonical generated website knowledge file used by the retrieval pipeline.
+
+Example behaviour:
+
+- **"What is RonBot?"** → concise portfolio-focused explanation.
+- **"How does RonBot work?"** → deeper explanation of website ingestion, structured knowledge, Python retrieval, grounded answering and fallback behaviour.
+
+RON-10 was acceptance-tested against general, technical-depth and unsupported questions, with the existing grounding and fallback behaviour preserved.
 
 ## 🗺️ Roadmap
 

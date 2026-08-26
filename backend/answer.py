@@ -6,6 +6,29 @@ CONTACT_MESSAGE = (
     "Please use the Contact page to ask Ron directly."
 )
 
+TECHNICAL_DEPTH_TERMS = {
+    "technical",
+    "implementation",
+    "architecture",
+    "retrieve",
+    "retrieval",
+    "grounding",
+    "knowledge",
+    "jsonl",
+    "ingestion",
+}
+
+def wants_technical_depth(question):
+    """Return True when the visitor explicitly asks for implementation detail."""
+    question_lower = question.lower()
+
+    return (
+        any(term in question_lower for term in TECHNICAL_DEPTH_TERMS)
+        or "how does ronbot work" in question_lower
+        or "how is ronbot built" in question_lower
+        or "how did you build ronbot" in question_lower
+    )
+
 
 def build_answer(question, chunks):
     results = retrieve(question, chunks, limit=3)
@@ -17,6 +40,54 @@ def build_answer(question, chunks):
     text = top_chunk.get("text", "")
     text_lower = text.lower()
     question_lower = question.lower()
+
+    # Concise general answer for recruiter/casual questions about RonBot.
+    if any(
+        phrase in question_lower
+        for phrase in {
+            "what is ronbot",
+            "tell me about ronbot",
+            "what does ronbot do",
+        }
+    ) and not wants_technical_depth(question):
+        combined_text = " ".join(
+            chunk.get("text", "").lower()
+            for _, chunk in results
+        )
+
+        if (
+            "ai-powered interactive portfolio assistant" in combined_text
+            and "using only information published on this website" in combined_text
+        ):
+            return (
+                "RonBot is an AI-powered portfolio assistant that helps visitors "
+                "explore Ron's experience, skills, certifications, education and projects "
+                "using only information published on his website."
+            )
+
+    # Technical-depth answer for visitors asking how RonBot works.
+    if wants_technical_depth(question):
+        combined_text = " ".join(
+            chunk.get("text", "").lower()
+            for _, chunk in results
+        )
+
+        required_terms = {
+            "website-only grounding",
+            "website knowledge",
+            "python",
+            "retrieval",
+        }
+
+        if any(term in combined_text for term in required_terms):
+            return (
+                "RonBot currently works by using content published on Ron's portfolio "
+                "as its knowledge source. The website is ingested into structured local "
+                "knowledge, Python retrieval logic finds the most relevant chunks for a "
+                "question, and the answer layer only responds when sufficient website "
+                "evidence is available. If the evidence is insufficient, RonBot falls "
+                "back to the Contact page rather than guessing."
+            )
 
     # Dog breed guardrail.
     if "breed" in question_lower and "breed" not in text_lower:

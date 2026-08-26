@@ -86,7 +86,7 @@ The ingestion work included:
 - Crawling the portfolio's same-site HTML pages.
 - Extracting useful page text into structured knowledge chunks.
 - Preserving source information so retrieved content remains traceable to the website.
-- Generating `ronbot_knowledge.jsonl` for local retrieval.
+
 - Verifying that website details were present in the generated knowledge data.
 
 A successful ingestion run visited **39 pages** and produced approximately **56,000 tokens** of website-grounded content.
@@ -129,6 +129,26 @@ Work completed during this stage included:
 - Preserved the Contact-page fallback when the website does not contain sufficient evidence.
 - Verified that unsupported questions such as Ron's favourite food and the breed of his dogs are not guessed.
 
+## RON-10 — Recruiter and technical answer depth
+
+RON-10 introduced adaptive answer depth so RonBot can provide concise responses for general visitors while allowing technically focused visitors to ask for deeper implementation detail.
+
+Implemented improvements include:
+
+- Added concise, recruiter-friendly responses for general RonBot questions.
+- Added technical-depth detection for questions about architecture, implementation, retrieval, grounding, ingestion and the knowledge source.
+- Improved retrieval so RonBot implementation questions favour the dedicated Project 02 content rather than unrelated Work Experience content.
+- Resolved ambiguity around phrases such as "How does RonBot work?", where "work" could previously be interpreted as employment history.
+- Preserved website-only grounding and the Contact-page fallback for unsupported questions.
+- Standardised `knowledge/website.jsonl` as the canonical generated website knowledge file used by the retrieval pipeline.
+
+Example behaviour:
+
+- **"What is RonBot?"** → concise portfolio-focused explanation.
+- **"How does RonBot work?"** → deeper explanation of website ingestion, structured knowledge, Python retrieval, grounded answering and fallback behaviour.
+
+RON-10 was acceptance-tested against general, technical-depth and unsupported questions, with the existing grounding and fallback behaviour preserved.
+
 A final regression test covered **11 representative questions**, including supported and deliberately unsupported queries.
 
 **Regression result: 11 / 11 passed.**
@@ -147,7 +167,7 @@ This establishes a stable local baseline for RonBot's website-grounded retrieval
 | RON-07 | Build website knowledge ingestion | Complete |
 | RON-08 | Prepare and validate local knowledge retrieval | Complete |
 | RON-09 | Grounded answers and unknown-answer Contact fallback | Complete |
-
+| RON-10 | Recruiter & technical answer depth | Complete |
 **Project progress: 9 / 24 tasks complete**
 
 ## Repository structure

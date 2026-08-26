@@ -106,6 +106,9 @@ Prepared and validated the local knowledge retrieval pipeline used to find relev
 **🛡️ RON-09 — Grounded Answers & Fallback**  
 Improved query matching, multi-chunk evidence handling and safe unknown-answer behaviour.
 
+**🧠 RON-10 — Recruiter & Technical Answer Depth**
+Added adaptive answer depth so general visitors receive concise portfolio answers while technical questions can surface deeper website-grounded implementation detail.
+
 ### 🧪 Regression Result
 
 **11 / 11 representative questions passed**

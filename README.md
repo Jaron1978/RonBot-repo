@@ -100,7 +100,7 @@ Added purposeful interaction states, thinking feedback and reduced-motion access
 **🌐 RON-07 — Website Knowledge Ingestion**  
 Built the website crawler and ingestion pipeline, processing **12 portfolio pages** into **45 structured knowledge chunks**.
 
-**🔎 RON-08 — Local Retrieval**
+**🔎 RON-08 — Local Retrieval**  
 Prepared and validated the local knowledge retrieval pipeline used to find relevant website evidence.
 
 **🛡️ RON-09 — Grounded Answers & Fallback**  
@@ -132,10 +132,10 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-04 — Production character  
 ✅ RON-05 — Local chat interface  
 ✅ RON-06 — Animation & interaction  
-✅ RON-07 — Website knowledge ingestion
-✅ RON-08 — Local knowledge retrieval
-✅ RON-09 — Grounded answers & safe fallback
-✅ RON-10 — Recruiter & technical answer depth
+✅ RON-07 — Website knowledge ingestion  
+✅ RON-08 — Local knowledge retrieval  
+✅ RON-09 — Grounded answers & safe fallback  
+✅ RON-10 — Recruiter & technical answer depth  
 
 **Current milestone:** Adaptive general and technical answer depth established while preserving website-only grounding.
 

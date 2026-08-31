@@ -139,10 +139,11 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-08 — Local knowledge retrieval  
 ✅ RON-09 — Grounded answers & safe fallback  
 ✅ RON-10 — Recruiter & technical answer depth  
+✅ RON-11 — RonBot API and frontend integration
 
-**Current milestone:** Adaptive general and technical answer depth established while preserving website-only grounding.
+**Current milestone:** AWS-hosted RonBot API and browser integration established while preserving website-only grounding.
 
-➡️ **Next:** RON-11 — RonBot API.
+➡️ **Next:** Production website integration and continued RonBot v1 development.
 
 ## RON-10 — Recruiter and technical answer depth
 
@@ -164,14 +165,31 @@ Example behaviour:
 
 RON-10 was acceptance-tested against general, technical-depth and unsupported questions, with the existing grounding and fallback behaviour preserved.
 
+## RON-11 — RonBot API and frontend integration
+
+RON-11 moved RonBot from a local-only prototype to a working AWS-hosted API connected to the browser chat interface.
+
+The work was completed in two stages:
+
+- **RON-11A — API Build:** Created the Lambda handler, packaged the existing retrieval and grounded-answer logic for AWS Lambda, deployed the function in `eu-west-2`, and exposed it through an Amazon API Gateway HTTP API using `POST /ask`.
+- **RON-11B — Integration & Testing:** Connected `frontend/ronbot.js` to the live API, configured CORS for local development and the production portfolio domains, verified guardrails and unsupported-question fallbacks through the browser, tested frontend failure handling, cleaned the deployment package, and reviewed the Lambda configuration and cost exposure.
+
+Current request path:
+
+`Browser → API Gateway HTTP API → AWS Lambda → RonBot retrieval and answer logic → website knowledge → browser`
+
+RON-11 was acceptance-tested through both direct Lambda invocation and the browser interface. The browser now receives real responses from the AWS-hosted RonBot backend rather than simulated frontend responses.
+
+The API remains deliberately lightweight at this stage. RonBot continues to use the existing deterministic website-grounded retrieval and answer logic; Amazon Bedrock and the planned managed knowledge architecture remain future development work.
+
 ## 🗺️ Roadmap
 
 ### 🤖 RonBot v1 — Website-Grounded Assistant
 
 Build and deploy a production-ready conversational assistant grounded exclusively in approved portfolio content.
 
-**Current →** Local ingestion, retrieval, grounded answers and frontend  
-**Next →** API integration · AWS deployment · Bedrock integration · Production testing
+**Current →** Website ingestion · grounded retrieval and answers · AWS Lambda API · API Gateway · browser integration  
+**Next →** Production website integration · Bedrock integration · managed knowledge architecture · production hardening
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 
@@ -196,11 +214,9 @@ Explore the technical documentation and implementation behind RonBot:
 **💬 Personality & behaviour:** [`docs/personality.md`](docs/personality.md)  
 **🤖 Character design:** [`docs/ronbot-character.md`](docs/ronbot-character.md)  
 **🌐 Frontend:** [`frontend/`](frontend/)  
-**🐍 Backend:** [`backend/`](backend/)  
-**☁️ Infrastructure:** [`infrastructure/`](infrastructure/)
+**🐍 Backend:** [`backend/`](backend/)
 
-The repository currently contains the working local frontend, website ingestion, retrieval and grounded-answer implementation. AWS infrastructure will be added as the production deployment stages are completed.
-
+The repository now contains the working frontend, website ingestion and retrieval pipeline, grounded-answer implementation, AWS Lambda handler, and browser integration with the deployed API Gateway HTTP API.
 ## 💡 Project Philosophy
 
 RonBot isn't about adding a chatbot to a website simply because AI is available.

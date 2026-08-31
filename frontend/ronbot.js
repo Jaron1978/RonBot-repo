@@ -97,15 +97,39 @@ thinkingMessage.innerHTML = `
 messages.appendChild(thinkingMessage);
 messages.scrollTop = messages.scrollHeight;
 
-  setTimeout(() => {
+fetch("https://9jf25kxi10.execute-api.eu-west-2.amazonaws.com/ask", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    question: message
+  })
+})
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("RonBot API request failed.");
+    }
+
+    return response.json();
+  })
+  .then((data) => {
+    thinkingMessage.remove();
+    addBotMessage(data.answer);
+    setThinking(false);
+  })
+  .catch((error) => {
     thinkingMessage.remove();
 
     addBotMessage(
-      "Test response: I’ll answer this from Ron’s website knowledge base."
+      "RonBot is having trouble connecting right now. Please try again shortly."
     );
 
     setThinking(false);
-  }, 1800);
+
+    console.error(error);
+  });
+
 });
 
 closeButton.addEventListener("click", closeChat);

@@ -31,15 +31,26 @@ def wants_technical_depth(question):
 
 
 def build_answer(question, chunks):
-    results = retrieve(question, chunks, limit=3)
+    question_lower = question.lower()
 
+    # Dog breed guardrail.
+    if "breed" in question_lower:
+        return (
+            "Ron's website tells me that his dogs are called Thor and Loki, "
+            "but it doesn't say what breed they are. "
+            "Please use the Contact page if you'd like to ask Ron directly."
+        )
+
+    results = retrieve(question, chunks, limit=3)
     if not results:
+
         return CONTACT_MESSAGE
 
     top_score, top_chunk = results[0]
+
     text = top_chunk.get("text", "")
+
     text_lower = text.lower()
-    question_lower = question.lower()
 
     # Concise general answer for recruiter/casual questions about RonBot.
     if any(
@@ -88,14 +99,6 @@ def build_answer(question, chunks):
                 "evidence is available. If the evidence is insufficient, RonBot falls "
                 "back to the Contact page rather than guessing."
             )
-
-    # Dog breed guardrail.
-    if "breed" in question_lower and "breed" not in text_lower:
-        return (
-            "Ron's website tells me that his dogs are called Thor and Loki, "
-            "but it doesn't say what breed they are. "
-            "Please use the Contact page if you'd like to ask Ron directly."
-        )
 
     # Dog names.
     if "dog" in question_lower and any(
@@ -242,14 +245,6 @@ def build_answer(question, chunks):
         f"{text[:700]}\n\n"
         f"Source: {top_chunk.get('source_url', 'Unknown')}"
     )
-
-    return (
-        "I found this on Ron's website:\n\n"
-
-        f"{text[:700]}\n\n"
-        f"Source: {top_chunk.get('source_url', 'Unknown')}"
-    )
-
 
 def main():
     chunks = load_knowledge()

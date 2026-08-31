@@ -1,1 +1,10 @@
+# Python cache
 __pycache__/
+*.py[cod]
+
+# RonBot Lambda deployment artefacts
+lambda-package/
+ronbot-lambda.zip
+
+# Local backup files
+*.bak

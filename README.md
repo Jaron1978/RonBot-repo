@@ -59,9 +59,9 @@ The current implementation provides a complete local path from portfolio content
 
 ### ☁️ Planned AWS Architecture
 
-![RonBot Planned AWS Architecture](ronbot-planned-aws-architecture.png)
+![RonBot Planned AWS Architecture](Planned_AWS.png)
 
-> **PLANNED / FUTURE ARCHITECTURE — NOT YET DEPLOYED**
+> **HYBRID ARCHITECTURE — AWS API LAYER DEPLOYED; AI AND MANAGED KNOWLEDGE COMPONENTS PLANNED**
 
 The production design moves the grounded RonBot experience onto a low-cost, serverless AWS architecture.
 

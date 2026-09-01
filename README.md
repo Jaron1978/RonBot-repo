@@ -109,6 +109,9 @@ Improved query matching, multi-chunk evidence handling and safe unknown-answer b
 **🧠 RON-10 — Recruiter & Technical Answer Depth**
 Added adaptive answer depth so general visitors receive concise portfolio answers while technical questions can surface deeper website-grounded implementation detail.
 
+**🔌 RON-11 — RonBot API & Frontend Integration**
+Deployed the RonBot backend to AWS Lambda, exposed it through an Amazon API Gateway HTTP API using `POST /ask`, connected the browser frontend to the live endpoint, configured CORS, and validated grounded responses, fallback behaviour and frontend error handling.
+
 ### 🧪 Regression Result
 
 **11 / 11 representative questions passed**

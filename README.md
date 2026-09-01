@@ -146,7 +146,7 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 
 **Current milestone:** AWS-hosted RonBot API and browser integration established while preserving website-only grounding.
 
-➡️ **Next:** Production website integration and continued RonBot v1 development.
+➡️ **Next:** RON-12 — Serverless Backend Hardening & Observability.
 
 ## RON-01 — Requirements and knowledge boundary
 
@@ -313,7 +313,8 @@ The API remains deliberately lightweight at this stage. RonBot continues to use 
 Build and deploy a production-ready conversational assistant grounded exclusively in approved portfolio content.
 
 **Current →** Website ingestion · grounded retrieval and answers · AWS Lambda API · API Gateway · browser integration  
-**Next →** Production website integration · Bedrock integration · managed knowledge architecture · production hardening
+
+**Next →** RON-12 Serverless Backend Hardening & Observability · RON-13 AI model integration · continued RonBot v1 development
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 

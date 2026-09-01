@@ -148,6 +148,127 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 
 ➡️ **Next:** Production website integration and continued RonBot v1 development.
 
+## RON-01 — Requirements and knowledge boundary
+
+RON-01 established the core requirements and safety boundary for RonBot.
+
+Implemented decisions include:
+
+- Defined RonBot as a portfolio assistant grounded only in information published on Ron's website.
+- Prevented unsupported external searches or assumptions about Ron.
+- Established the Contact page as the fallback when the website does not contain enough information to answer a question.
+- Defined privacy and grounding as core design requirements rather than later additions.
+
+RON-01 established the rules that all subsequent RonBot retrieval, answering and guardrail behaviour follows.
+
+## RON-02 — RonBot architecture
+
+RON-02 defined the initial technical architecture for the RonBot platform.
+
+Implemented decisions include:
+
+- Defined the separation between the browser interface, backend processing, website knowledge and future AI services.
+- Selected a lightweight serverless AWS direction to keep the portfolio project practical and cost-conscious.
+- Documented the current and planned architecture so the implementation could evolve incrementally.
+- Established Python as the core backend language.
+
+RON-02 provided the technical blueprint used throughout the subsequent RonBot development.
+
+## RON-03 — Personality and response style
+
+RON-03 defined how RonBot should communicate with portfolio visitors.
+
+Implemented improvements include:
+
+- Created a friendly and professional response style suitable for recruiters, hiring managers and technical visitors.
+- Established concise answers as the default while allowing additional technical depth where appropriate.
+- Defined behaviour for questions that cannot be answered from the website.
+- Preserved the website-only knowledge boundary within the conversational design.
+
+RON-03 established a consistent RonBot personality without weakening the project's grounding requirements.
+
+## RON-04 — Production RonBot character
+
+RON-04 created and approved the visual identity used for RonBot.
+
+Implemented improvements include:
+
+- Developed the production Robot Ron character for the portfolio.
+- Incorporated visual references to AWS, Redpanda, Azure and Google technologies.
+- Included study material as part of the character design to reflect ongoing learning and certification development.
+- Established the character as the visual identity for the RonBot chat experience.
+
+RON-04 gave the technical assistant a consistent visual identity suitable for integration into the portfolio.
+
+## RON-05 — Local chat interface
+
+RON-05 established the first working browser-based RonBot chat experience.
+
+Implemented improvements include:
+
+- Built the local RonBot chat interface using HTML, CSS and JavaScript.
+- Added user and bot message presentation.
+- Created the initial interaction flow for submitting questions and displaying responses.
+- Established the frontend structure later used for the live AWS API integration.
+
+RON-05 provided the working frontend foundation for subsequent interaction and backend development.
+
+## RON-06 — Launcher animation and interaction
+
+RON-06 improved the RonBot frontend from a static interface into an interactive portfolio feature.
+
+Implemented improvements include:
+
+- Added the floating RonBot launcher and open/close behaviour.
+- Added hover and interaction feedback.
+- Added purposeful thinking behaviour and an animated thinking indicator.
+- Improved message spacing and general chat presentation.
+- Added reduced-motion accessibility support.
+
+RON-06 established the interaction model used by the current RonBot browser interface.
+
+## RON-07 — Website knowledge ingestion
+
+RON-07 created the pipeline used to turn the live portfolio website into structured RonBot knowledge.
+
+Implemented improvements include:
+
+- Built the Python website ingestion process.
+- Crawled the portfolio while restricting ingestion to the approved website domain.
+- Converted website content into structured and traceable knowledge chunks.
+- Added chunking, overlap and URL canonicalisation.
+- Generated the website knowledge dataset used by the retrieval pipeline.
+
+RON-07 established the website itself as RonBot's canonical knowledge source.
+
+## RON-08 — Local knowledge retrieval
+
+RON-08 implemented the retrieval layer used to find relevant website information for a visitor's question.
+
+Implemented improvements include:
+
+- Built local Python retrieval over the generated website knowledge.
+- Added tokenisation, stop-word handling and relevance scoring.
+- Added query expansion to improve matching between natural-language questions and website content.
+- Introduced a minimum relevance threshold to reduce weak or unrelated answers.
+- Preserved traceability back to the source website content.
+
+RON-08 provided the retrieval foundation used by RonBot's grounded answer logic.
+
+## RON-09 — Grounded answers and safe fallback
+
+RON-09 connected retrieval to conversational answer generation while enforcing the website-only knowledge boundary.
+
+Implemented improvements include:
+
+- Added grounded answers based on retrieved website content.
+- Improved query matching and multi-chunk evidence handling.
+- Added explicit guardrails for known unsupported questions.
+- Implemented safe fallback behaviour directing visitors to the Contact page when sufficient evidence is unavailable.
+- Tested supported and deliberately unsupported questions to ensure RonBot does not invent information.
+
+RON-09 established the grounded-answer and hallucination-prevention behaviour preserved by later milestones.
+
 ## RON-10 — Recruiter and technical answer depth
 
 RON-10 introduced adaptive answer depth so RonBot can provide concise responses for general visitors while allowing technically focused visitors to ask for deeper implementation detail.

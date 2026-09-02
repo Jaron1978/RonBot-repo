@@ -143,8 +143,9 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-09 — Grounded answers & safe fallback  
 ✅ RON-10 — Recruiter & technical answer depth  
 ✅ RON-11 — RonBot API and frontend integration
+✅ RON-12 — Serverless backend hardening & observability
 
-**Current milestone:** AWS-hosted RonBot API and browser integration established while preserving website-only grounding.
+**Current milestone:** AWS-hosted RonBot backend hardened with structured logging, CloudWatch observability, safe error handling, configurable logging, least-privilege IAM and live API regression testing.
 
 ➡️ **Next:** RON-13 — AI Model Integration.
 

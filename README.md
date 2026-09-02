@@ -146,7 +146,7 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 
 **Current milestone:** AWS-hosted RonBot API and browser integration established while preserving website-only grounding.
 
-➡️ **Next:** RON-12 — Serverless Backend Hardening & Observability.
+➡️ **Next:** RON-13 — AI Model Integration.
 
 ## RON-01 — Requirements and knowledge boundary
 
@@ -306,6 +306,46 @@ RON-11 was acceptance-tested through both direct Lambda invocation and the brows
 
 The API remains deliberately lightweight at this stage. RonBot continues to use the existing deterministic website-grounded retrieval and answer logic; Amazon Bedrock and the planned managed knowledge architecture remain future development work.
 
+## RON-12 — Serverless Backend Hardening & Observability
+
+**Status: Complete**
+
+RON-12 hardened the working AWS-hosted RonBot backend introduced in RON-11, focusing on operational visibility, safer error handling, configuration management, least-privilege access and production-readiness checks.
+
+### Implemented
+
+- Added structured application logging to the AWS Lambda handler.
+- Added request correlation using the AWS Lambda request ID.
+- Added request-duration measurements for operational troubleshooting.
+- Added `INFO` logging for successful requests.
+- Added `WARNING` logging for rejected or malformed requests.
+- Added safe `500` handling for unexpected backend failures.
+- Avoided logging visitor questions and RonBot answers to reduce unnecessary storage of conversation content.
+- Added configurable `LOG_LEVEL` support using an AWS Lambda environment variable, with `INFO` as the safe default.
+- Reviewed application configuration and deliberately retained retrieval thresholds and fallback behaviour in version-controlled application code.
+- Reviewed the Lambda execution role and confirmed least-privilege CloudWatch Logs permissions.
+- Reviewed Lambda runtime configuration and retained 128 MB memory, 512 MB ephemeral storage and a 3-second timeout.
+- Verified CloudWatch visibility for successful and rejected requests.
+- Performed live API regression testing through Amazon API Gateway.
+
+### Validation
+
+RON-12 was validated against the live AWS deployment using supported, unsupported and malformed requests.
+
+The production checks confirmed:
+
+- grounded supported questions continue to return successful responses;
+- unsupported questions continue to use the safe Contact-page fallback;
+- malformed requests return HTTP `400` without exposing internal implementation details;
+- successful requests generate operational `INFO` events in CloudWatch;
+- malformed requests generate `WARNING` events with the relevant error type;
+- visitor question and answer content is not written to application logs;
+- the Lambda remained well within its 128 MB memory allocation during testing.
+
+Observed execution remained lightweight, with approximately 40 MB maximum memory usage and warm application processing comfortably below the configured three-second timeout.
+
+The current backend therefore has a tested operational baseline for logging, troubleshooting, configuration, error handling and least-privilege execution before the planned AI model integration work begins.
+
 ## 🗺️ Roadmap
 
 ### 🤖 RonBot v1 — Website-Grounded Assistant
@@ -314,7 +354,7 @@ Build and deploy a production-ready conversational assistant grounded exclusivel
 
 **Current →** Website ingestion · grounded retrieval and answers · AWS Lambda API · API Gateway · browser integration  
 
-**Next →** RON-12 Serverless Backend Hardening & Observability · RON-13 AI model integration · continued RonBot v1 development
+**Next →** RON-13 AI model integration · continued RonBot v1 development
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 

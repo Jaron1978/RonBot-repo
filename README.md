@@ -15,8 +15,6 @@
 
 ---
 
-## 🚀 Project Snapshot
-
 ## 📌 Project Snapshot
 
 - ✅ Website-grounded knowledge ingestion

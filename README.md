@@ -17,12 +17,18 @@
 
 ## 🚀 Project Snapshot
 
-🌐 **39 portfolio pages ingested**  
-📚 **~56,000 tokens of website-grounded content**  
-🧪 **11 / 11 regression tests passed**  
-🛡️ **Website-only knowledge boundary**  
-🐍 **Python retrieval & answer pipeline**  
-☁️ **AWS production architecture planned**
+## 📌 Project Snapshot
+
+- ✅ Website-grounded knowledge ingestion
+- ✅ Local retrieval and relevance scoring
+- ✅ Grounded answers with safe fallback behaviour
+- ✅ Recruiter and technical answer depth
+- ✅ AWS Lambda serverless backend
+- ✅ Amazon API Gateway HTTP API
+- ✅ Browser-to-AWS RonBot integration
+- ✅ CloudWatch logging and operational observability
+- 🚧 Amazon Bedrock AI model integration next
+- 🗺️ Managed AWS knowledge architecture planned
 
 ## ✨ Current Capabilities
 
@@ -44,26 +50,49 @@ RonBot is deliberately restricted to approved portfolio content.
 
 This boundary is a core design requirement, not simply a conversational preference.
 
-### 💻 Current Local Architecture
+## 🏗️ Current Architecture
 
-![RonBot Current Local Architecture](ronbot-current-local-architecture.png)
+RonBot currently uses a hybrid architecture combining website-grounded retrieval with a deployed AWS serverless API layer.
 
-The current implementation provides a complete local path from portfolio content to grounded answers.
+The browser sends questions to Amazon API Gateway, which invokes the RonBot AWS Lambda function. Lambda uses the existing Python retrieval and answer logic against the approved website knowledge base and returns the grounded response to the browser.
 
-**Knowledge:** Website → Ingestion → JSONL knowledge base  
-**Retrieval:** Question → Local retrieval → Relevant website evidence  
-**Answer:** Retrieved evidence → Grounded response  
-**Fallback:** Insufficient evidence → Contact Ron
-
-✅ **Implemented and tested locally**
+```text
+Portfolio Website
+       │
+       ▼
+RonBot Browser Interface
+       │
+       ▼
+Amazon API Gateway
+       │
+       ▼
+AWS Lambda
+       │
+       ├── Python Retrieval & Scoring
+       │
+       ├── Grounded Answer Logic
+       │
+       ▼
+Website Knowledge Base
+       │
+       ▼
+Grounded Response
+       │
+       ▼
+RonBot Browser Interface
 
 ### ☁️ Planned AWS Architecture
 
-![RonBot Planned AWS Architecture](Planned_AWS.png)
-
 > **HYBRID ARCHITECTURE — AWS API LAYER DEPLOYED; AI AND MANAGED KNOWLEDGE COMPONENTS PLANNED**
 
-The production design moves the grounded RonBot experience onto a low-cost, serverless AWS architecture.
+The AWS serverless API layer is now deployed and operational using Amazon API Gateway and AWS Lambda.
+
+The next stage evolves the existing grounded architecture by introducing Amazon Bedrock for AI-generated responses while preserving RonBot's website-only knowledge boundary.
+
+Future architecture work may also introduce managed AWS services for knowledge storage, retrieval, monitoring and security as RonBot progresses toward its production AI architecture.
+
+![RonBot Planned AWS Architecture](Planned_AWS.png)
+
 
 **Frontend:** Portfolio Website → API Gateway  
 **Compute:** API Gateway → AWS Lambda  
@@ -71,18 +100,27 @@ The production design moves the grounded RonBot experience onto a low-cost, serv
 **Knowledge:** Bedrock Knowledge Base → Amazon S3 / S3 Vectors  
 **Guardrail:** Portfolio-grounded answers remain the core requirement
 
-🔵 **Current status:** Architecture designed; AWS implementation planned.
+🔵 **Current status:** AWS API Gateway and Lambda deployed; Amazon Bedrock and managed knowledge components remain planned.
 
 [View the detailed architecture decision →](docs/architecture.md)
 
 ## 🛠️ Technology Stack
 
-**🐍 Backend:** Python · Local retrieval · Grounded answer pipeline  
-**🌐 Frontend:** HTML · CSS · JavaScript  
-**🧠 AI & Retrieval:** RAG concepts · Knowledge ingestion · Query expansion · Multi-chunk retrieval  
-**📚 Knowledge:** Website content · Structured JSONL  
-**☁️ Planned AWS:** API Gateway · Lambda · Amazon Bedrock · Bedrock Knowledge Base · S3 / S3 Vectors  
-**🔧 Development:** Git · GitHub · Python virtual environments
+### Current
+
+- **Python** — retrieval, scoring, grounded answer logic and Lambda backend
+- **HTML / CSS / JavaScript** — RonBot browser interface
+- **Amazon API Gateway** — public HTTP API for RonBot requests
+- **AWS Lambda** — serverless RonBot backend
+- **Amazon CloudWatch** — application logging and operational visibility
+- **JSONL** — website knowledge base
+- **GitHub** — source control and project documentation
+
+### Planned
+
+- **Amazon Bedrock** — AI model integration for grounded natural-language responses
+- **Managed AWS knowledge services** — future retrieval/RAG architecture where appropriate
+- **Additional AWS monitoring and security controls** — as the AI architecture evolves
 
 ## 🔨 Development Highlights
 
@@ -112,6 +150,18 @@ Added adaptive answer depth so general visitors receive concise portfolio answer
 **🔌 RON-11 — RonBot API & Frontend Integration**
 Deployed the RonBot backend to AWS Lambda, exposed it through an Amazon API Gateway HTTP API using `POST /ask`, connected the browser frontend to the live endpoint, configured CORS, and validated grounded responses, fallback behaviour and frontend error handling.
 
+### RON-12 — Serverless Backend Hardening & Observability
+Hardened the deployed AWS backend for production-readiness:
+
+- Added structured Lambda application logging.
+- Added AWS request IDs and request-duration measurements.
+- Added safe `400` and `500` API error handling.
+- Added configurable `LOG_LEVEL` environment configuration.
+- Verified CloudWatch visibility without logging visitor questions or answers.
+- Reviewed Lambda IAM permissions for least-privilege execution.
+- Validated memory, timeout and cold/warm execution performance.
+- Completed live API regression testing for supported, unsupported and malformed requests.
+
 ### 🧪 Regression Result
 
 **11 / 11 representative questions passed**
@@ -140,10 +190,10 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-06 — Animation & interaction  
 ✅ RON-07 — Website knowledge ingestion  
 ✅ RON-08 — Local knowledge retrieval  
-✅ RON-09 — Grounded answers & safe fallback  
-✅ RON-10 — Recruiter & technical answer depth  
+✅ RON-09 — Grounded answers & safe fallback
+✅ RON-10 — Recruiter & technical answer depth
 ✅ RON-11 — RonBot API and frontend integration
-✅ RON-12 — Serverless backend hardening & observability
+✅ RON-12 — Serverless Backend Hardening & Observability
 
 **Current milestone:** AWS-hosted RonBot backend hardened with structured logging, CloudWatch observability, safe error handling, configurable logging, least-privilege IAM and live API regression testing.
 

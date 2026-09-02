@@ -57,29 +57,54 @@ RonBot currently uses a hybrid architecture combining website-grounded retrieval
 The browser sends questions to Amazon API Gateway, which invokes the RonBot AWS Lambda function. Lambda uses the existing Python retrieval and answer logic against the approved website knowledge base and returns the grounded response to the browser.
 
 ```text
+
 Portfolio Website
+
        │
+
        ▼
+
 RonBot Browser Interface
+
        │
+
        ▼
+
 Amazon API Gateway
+
        │
+
        ▼
+
 AWS Lambda
+
        │
+
        ├── Python Retrieval & Scoring
+
        │
+
        ├── Grounded Answer Logic
+
        │
+
        ▼
+
 Website Knowledge Base
+
        │
+
        ▼
+
 Grounded Response
+
        │
+
        ▼
+
 RonBot Browser Interface
+
+```
 
 ### ☁️ Planned AWS Architecture
 
@@ -445,6 +470,7 @@ The goal is to build a genuinely useful portfolio experience while developing pr
 
 <p align="center">
   <a href="https://www.ron-jackson.co.uk">🌐 Portfolio</a> •
+  <a href="https://www.ron-jackson.co.uk/project-02.html">🤖 RonBot Project</a> •
   <a href="https://github.com/Jaron1978">👤 GitHub Profile</a> •
   <a href="https://github.com/Jaron1978/website-project">☁️ Website Project</a>
 </p>

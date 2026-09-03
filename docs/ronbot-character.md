@@ -1,6 +1,6 @@
 # RON-04 — Production RonBot Character
 
-**Status:** In progress
+**Status:** Complete
 
 ## Objective
 
@@ -29,7 +29,7 @@ The production character should include:
 - Consistent proportions and visual identity.
 - A canonical neutral/default pose.
 
-Future animation states such as blinking, waving, thinking or typing should be handled as separate implementation work rather than expanding the scope of RON-04.
+Animation and interaction states such as the floating launcher, thinking feedback and reduced-motion support were implemented separately during RON-06, preserving RON-04 as the character-design milestone.
 
 ## Planned repository location
 
@@ -41,9 +41,12 @@ assets/ronbot/
 
 ## Acceptance criteria
 
-- [ ] Canonical production character approved.
-- [ ] High-resolution master created.
-- [ ] Transparent-background website asset created.
-- [ ] Web-optimised asset created.
-- [ ] Final assets stored in the repository.
-- [ ] Character documentation updated with final asset details.
+- [x] Canonical production character approved.
+
+- [x] Production character asset created.
+
+- [x] Website-ready production asset created.
+
+- [x] Final production asset stored in the repository.
+
+- [x] Character documentation updated with final asset details.

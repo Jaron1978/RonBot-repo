@@ -159,7 +159,7 @@ Built the working HTML, CSS and JavaScript conversational interface.
 Added purposeful interaction states, thinking feedback and reduced-motion accessibility.
 
 **🌐 RON-07 — Website Knowledge Ingestion**  
-Built the website crawler and ingestion pipeline, processing **12 portfolio pages** into **45 structured knowledge chunks**.
+Built the website crawler and ingestion pipeline, converting approved portfolio content into structured, traceable knowledge chunks for retrieval.
 
 **🔎 RON-08 — Local Retrieval**  
 Prepared and validated the local knowledge retrieval pipeline used to find relevant website evidence.
@@ -213,9 +213,9 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-06 — Animation & interaction  
 ✅ RON-07 — Website knowledge ingestion  
 ✅ RON-08 — Local knowledge retrieval  
-✅ RON-09 — Grounded answers & safe fallback
-✅ RON-10 — Recruiter & technical answer depth
-✅ RON-11 — RonBot API and frontend integration
+✅ RON-09 — Grounded answers & safe fallback  
+✅ RON-10 — Recruiter & technical answer depth  
+✅ RON-11 — RonBot API and frontend integration  
 ✅ RON-12 — Serverless Backend Hardening & Observability
 
 **Current milestone:** AWS-hosted RonBot backend hardened with structured logging, CloudWatch observability, safe error handling, configurable logging, least-privilege IAM and live API regression testing.
@@ -456,6 +456,7 @@ Explore the technical documentation and implementation behind RonBot:
 **🐍 Backend:** [`backend/`](backend/)
 
 The repository now contains the working frontend, website ingestion and retrieval pipeline, grounded-answer implementation, AWS Lambda handler, and browser integration with the deployed API Gateway HTTP API.
+
 ## 💡 Project Philosophy
 
 RonBot isn't about adding a chatbot to a website simply because AI is available.

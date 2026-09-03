@@ -8,36 +8,58 @@ Define the frontend, API, AI and website-knowledge components required for RonBo
 
 RonBot must answer questions using only information made available from `ron-jackson.co.uk`. If sufficient information cannot be retrieved from the website knowledge base, RonBot must not invent an answer and should direct the visitor to the Contact Ron page.
 
-## Proposed architecture
+## Current deployed architecture
+
+RON-11 and RON-12 established the first deployed AWS architecture for RonBot.
 
 ```text
 Visitor
+
   |
+
   v
+
 ron-jackson.co.uk / CloudFront
+
   |
+
   v
+
 RonBot frontend (HTML / CSS / JavaScript)
+
   |
+
   | HTTPS
+
   v
+
 Amazon API Gateway HTTP API
+
   |
+
   v
+
 AWS Lambda (Python)
+
   |
-  +----> Amazon Bedrock foundation model
+
+  +--> Retrieval & relevance scoring
+
   |
-  +----> Amazon Bedrock Knowledge Base
-              |
-              v
-        Website knowledge
-              |
-              v
-         Amazon S3
-              |
-              v
-         S3 Vectors
+
+  +--> Grounded answer logic
+
+  |
+
+  v
+
+Website knowledge base
+
+  |
+
+  v
+
+Grounded response
 ```
 
 ## Frontend
@@ -46,23 +68,25 @@ RonBot will be integrated into the existing static portfolio using HTML, CSS and
 
 ## API
 
-**Amazon API Gateway HTTP API** will expose the RonBot backend over HTTPS, initially through an endpoint such as `POST /ronbot/chat`.
+**Amazon API Gateway HTTP API** exposes the deployed RonBot backend over HTTPS using `POST /ask`.
 
-The API layer will provide a clean boundary between the public website and backend, with CORS restrictions, request controls and throttling as appropriate. An HTTP API is preferred because RonBot does not currently require the broader feature set of an API Gateway REST API.
+The API layer provides a clean boundary between the public website and backend, with CORS configured for the approved frontend origins. Additional request controls and throttling can be introduced as the production architecture evolves.
 
 ## Backend
 
-**AWS Lambda**, using Python, will act as the application backend. It will validate requests, retrieve relevant website knowledge, invoke the Bedrock model with RonBot's instructions and retrieved context, and return the response to the browser.
+**AWS Lambda**, using Python, is the deployed application backend. It validates requests, runs the existing website-grounded retrieval and answer logic, applies safe fallback behaviour and returns responses through API Gateway.
 
-The Lambda should also implement the Contact Ron fallback when sufficient grounded information cannot be retrieved.
+The Lambda implementation includes structured application logging, AWS request IDs, request-duration measurements, safe `400` and `500` error handling and configurable `LOG_LEVEL` support.
 
-## AI
+Amazon Bedrock integration is the next development stage. RON-13 will evolve the backend so the model can formulate natural-language responses from approved website evidence without weakening RonBot's existing grounding boundary.
+
+## Planned AI integration
 
 **Amazon Bedrock** will provide the foundation model. The initial low-cost candidate is **Amazon Nova Micro**, subject to validation during implementation.
 
 The model will not be treated as an unrestricted source of knowledge. It will be instructed to answer from supplied website context and not invent missing information.
 
-## Website knowledge and RAG
+## Planned managed knowledge and RAG
 
 The approved portfolio content will be stored in a dedicated S3 knowledge source, for example:
 
@@ -84,7 +108,11 @@ This creates a Retrieval-Augmented Generation (RAG) flow: retrieve relevant webs
 
 ## Knowledge updates
 
-The website remains the authoritative source. For the first version, significant website changes will be manually reflected in the S3 knowledge documents and followed by a knowledge-base synchronisation. Automation can be considered later as part of the deployment pipeline.
+The portfolio website remains RonBot's authoritative source.
+
+The current ingestion pipeline crawls approved portfolio content and generates the structured `knowledge/website.jsonl` dataset used by the retrieval layer.
+
+As RonBot evolves toward managed AWS knowledge services, the update process may move to S3-backed knowledge documents and managed synchronisation. Any future implementation must preserve the website as the canonical source rather than creating a competing source of truth.
 
 ## Cost-control principles
 
@@ -102,9 +130,11 @@ No EC2 instances, always-on containers or Kubernetes clusters are required for R
 - Resist attempts to override RonBot's website-only behaviour.
 - Do not expose system prompts, credentials, secrets or sensitive internal configuration.
 
-## Architecture decision
+## Original RON-02 architecture decision
 
-**RonBot v1:**
+The target architecture selected during RON-02 was:
+
+**RonBot v1 target:**
 
 `Portfolio Website -> API Gateway HTTP API -> Lambda -> Bedrock + Bedrock Knowledge Base -> S3 / S3 Vectors`
 

@@ -24,14 +24,15 @@
 - ✅ AWS Lambda serverless backend
 - ✅ Amazon API Gateway HTTP API
 - ✅ Browser-to-AWS RonBot integration
-- ✅ CloudWatch logging and operational observability
-- 🚧 Amazon Bedrock AI model integration next
+- ✅ Amazon Bedrock AI model integration
+- ✅ Amazon Nova Micro grounded response generation
 - 🗺️ Managed AWS knowledge architecture planned
 
 ## ✨ Current Capabilities
 
 **🔎 Retrieval:** Searches structured knowledge extracted from the portfolio website  
 **💬 Grounded Answers:** Responds using retrieved website evidence rather than unrestricted knowledge  
+**🧠 AI Responses:** Uses Amazon Nova Micro through Amazon Bedrock to generate natural-language answers from retrieved website evidence
 **🧩 Multi-Chunk Evidence:** Combines relevant information when an answer spans multiple knowledge chunks  
 **🛡️ Safe Fallback:** Unsupported questions are not guessed and direct visitors to the Contact page  
 **🤖 Interaction:** Animated Robot Ron frontend with purposeful thinking states  
@@ -52,67 +53,51 @@ This boundary is a core design requirement, not simply a conversational preferen
 
 RonBot currently uses a hybrid architecture combining website-grounded retrieval with a deployed AWS serverless API layer.
 
-The browser sends questions to Amazon API Gateway, which invokes the RonBot AWS Lambda function. Lambda uses the existing Python retrieval and answer logic against the approved website knowledge base and returns the grounded response to the browser.
+The browser sends questions to Amazon API Gateway, which invokes the RonBot AWS Lambda function. Lambda uses the Python retrieval and scoring layer to select relevant evidence from the approved website knowledge base. Retrieved evidence is supplied to Amazon Nova Micro through Amazon Bedrock to generate a natural-language response while preserving RonBot’s website-only grounding rules, deterministic safeguards and Contact-page fallback.
 
 ```text
 
 Portfolio Website
-
        │
-
        ▼
-
 RonBot Browser Interface
-
        │
-
        ▼
-
 Amazon API Gateway
-
        │
-
        ▼
-
 AWS Lambda
-
        │
-
        ├── Python Retrieval & Scoring
-
        │
-
-       ├── Grounded Answer Logic
-
+       ├── Deterministic Grounding & Safeguards
        │
-
        ▼
-
-Website Knowledge Base
-
+Retrieved Website Evidence
        │
-
        ▼
-
-Grounded Response
-
+Amazon Bedrock
        │
-
        ▼
-
+Amazon Nova Micro
+       │
+       ▼
+Grounded AI Response
+       │
+       ▼
 RonBot Browser Interface
 
 ```
 
 ### ☁️ Planned AWS Architecture
 
-> **HYBRID ARCHITECTURE — AWS API LAYER DEPLOYED; AI AND MANAGED KNOWLEDGE COMPONENTS PLANNED**
+> **HYBRID ARCHITECTURE — AWS API AND BEDROCK AI LAYERS DEPLOYED; MANAGED KNOWLEDGE COMPONENTS PLANNED**
 
-The AWS serverless API layer is now deployed and operational using Amazon API Gateway and AWS Lambda.
+The AWS serverless API and AI layers are now deployed and operational using Amazon API Gateway, AWS Lambda and Amazon Bedrock with Amazon Nova Micro.
 
-The next stage evolves the existing grounded architecture by introducing Amazon Bedrock for AI-generated responses while preserving RonBot's website-only knowledge boundary.
+RonBot currently retrieves relevant evidence from its structured website knowledge base before supplying that evidence to Nova Micro for grounded natural-language response generation.
 
-Future architecture work may also introduce managed AWS services for knowledge storage, retrieval, monitoring and security as RonBot progresses toward its production AI architecture.
+Future architecture work may introduce managed AWS services for knowledge storage and retrieval while preserving RonBot's website-only knowledge boundary.
 
 ![RonBot Planned AWS Architecture](Planned_AWS.png)
 
@@ -123,7 +108,7 @@ Future architecture work may also introduce managed AWS services for knowledge s
 **Knowledge:** Bedrock Knowledge Base → Amazon S3 / S3 Vectors  
 **Guardrail:** Portfolio-grounded answers remain the core requirement
 
-🔵 **Current status:** AWS API Gateway and Lambda deployed; Amazon Bedrock and managed knowledge components remain planned.
+🔵 **Current status:** AWS API Gateway, Lambda and Amazon Bedrock with Nova Micro deployed; managed AWS knowledge components remain planned.
 
 [View the detailed architecture decision →](docs/architecture.md)
 
@@ -138,10 +123,10 @@ Future architecture work may also introduce managed AWS services for knowledge s
 - **Amazon CloudWatch** — application logging and operational visibility
 - **JSONL** — website knowledge base
 - **GitHub** — source control and project documentation
+- **Amazon Bedrock** — AI model integration for grounded natural-language responses
 
 ### Planned
 
-- **Amazon Bedrock** — AI model integration for grounded natural-language responses
 - **Managed AWS knowledge services** — future retrieval/RAG architecture where appropriate
 - **Additional AWS monitoring and security controls** — as the AI architecture evolves
 
@@ -185,6 +170,21 @@ Hardened the deployed AWS backend for production-readiness:
 - Validated memory, timeout and cold/warm execution performance.
 - Completed live API regression testing for supported, unsupported and malformed requests.
 
+### RON-13 — AI Model Integration
+Integrated Amazon Nova Micro through Amazon Bedrock into RonBot's production response path:
+
+- Validated Amazon Nova Micro in `eu-west-2` using the Bedrock Converse API.
+- Integrated Bedrock locally with the existing website-grounded retrieval pipeline.
+- Supplied retrieved website evidence to Nova Micro rather than unrestricted portfolio questions.
+- Strengthened grounding instructions to prevent unsupported inference and cross-role fact mixing.
+- Preserved deterministic answer branches and the Contact-page fallback.
+- Added targeted retrieval weighting for key technical terms such as AWS.
+- Deployed the Bedrock integration to AWS Lambda.
+- Added least-privilege `bedrock:InvokeModel` permission for Nova Micro.
+- Validated grounded responses through the production AWS path.
+
+RON-13 moves RonBot from deterministic grounded retrieval into AI-generated responses while preserving the website as the canonical knowledge source.
+
 ### 🧪 Regression Result
 
 **11 / 11 representative questions passed**
@@ -217,10 +217,11 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-10 — Recruiter & technical answer depth  
 ✅ RON-11 — RonBot API and frontend integration  
 ✅ RON-12 — Serverless Backend Hardening & Observability
+✅ RON-13 — AI Model Integration
 
-**Current milestone:** AWS-hosted RonBot backend hardened with structured logging, CloudWatch observability, safe error handling, configurable logging, least-privilege IAM and live API regression testing.
+**Current milestone:** Amazon Nova Micro integrated through Amazon Bedrock into the production RonBot response path, using retrieved website evidence for grounded AI-generated answers while preserving deterministic safeguards and safe fallback behaviour.
 
-➡️ **Next:** RON-13 — AI Model Integration.
+➡️ **Next:** RON-14 — Conversation Context.
 
 ## RON-01 — Requirements and knowledge boundary
 
@@ -378,7 +379,7 @@ Current request path:
 
 RON-11 was acceptance-tested through both direct Lambda invocation and the browser interface. The browser now receives real responses from the AWS-hosted RonBot backend rather than simulated frontend responses.
 
-The API remains deliberately lightweight at this stage. RonBot continues to use the existing deterministic website-grounded retrieval and answer logic; Amazon Bedrock and the planned managed knowledge architecture remain future development work.
+At the completion of RON-11, RonBot still used deterministic website-grounded retrieval and answer logic. Amazon Bedrock integration was subsequently introduced in RON-13, while the managed knowledge architecture remains future development work. 
 
 ## RON-12 — Serverless Backend Hardening & Observability
 
@@ -420,15 +421,35 @@ Observed execution remained lightweight, with approximately 40 MB maximum memory
 
 The current backend therefore has a tested operational baseline for logging, troubleshooting, configuration, error handling and least-privilege execution before the planned AI model integration work begins.
 
+## RON-13 — AI Model Integration
+
+**Status: Complete**
+
+RON-13 introduced AI-generated natural-language responses into RonBot while preserving the website-only knowledge boundary established earlier in the project.
+
+The work was completed in three stages:
+
+- **RON-13A — Model & Access Validation:** Selected Amazon Nova Micro, validated availability in `eu-west-2` and successfully tested the model through the Amazon Bedrock Converse API.
+- **RON-13B — Local Grounded Integration:** Connected Bedrock to the existing Python retrieval pipeline, supplied retrieved website evidence to the model and strengthened grounding behaviour to prevent unsupported inference and cross-role fact mixing.
+- **RON-13C — AWS Deployment & Validation:** Deployed the integration to AWS Lambda, added least-privilege `bedrock:InvokeModel` access for Nova Micro and validated grounded responses through the production AWS path.
+
+The production response flow now combines deterministic retrieval and safeguards with AI-generated responses:
+
+`Question → Retrieval & Scoring → Website Evidence → Amazon Bedrock → Nova Micro → Grounded Response`
+
+The Contact-page fallback remains in place when retrieval cannot find sufficient website evidence.
+
+RON-13 therefore adds generative AI without changing RonBot's fundamental rule: the portfolio website remains the canonical source of truth.
+
 ## 🗺️ Roadmap
 
 ### 🤖 RonBot v1 — Website-Grounded Assistant
 
 Build and deploy a production-ready conversational assistant grounded exclusively in approved portfolio content.
 
-**Current →** Website ingestion · grounded retrieval and answers · AWS Lambda API · API Gateway · browser integration  
+**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · grounded AI responses  
 
-**Next →** RON-13 AI model integration · continued RonBot v1 development
+**Next →** RON-14 Conversation Context · continued RonBot v1 development
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 

@@ -33,6 +33,7 @@ def lambda_handler(event, context):
             body = json.loads(body)
 
         question = body.get("question", "").strip()
+        history = body.get("history", [])
 
         if not question:
             logger.warning(
@@ -50,7 +51,7 @@ def lambda_handler(event, context):
                 }),
             }
 
-        answer = build_answer(question, chunks)
+        answer = build_answer(question, chunks, history=history)
 
         duration_ms = round(
             (time.perf_counter() - start_time) * 1000,

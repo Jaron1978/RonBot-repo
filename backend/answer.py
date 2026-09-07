@@ -1,5 +1,16 @@
+import boto3
+from botocore.exceptions import ClientError
+
 from retrieve import load_knowledge, retrieve
 
+
+BEDROCK_MODEL_ID = "amazon.nova-micro-v1:0"
+BEDROCK_REGION = "eu-west-2"
+
+bedrock = boto3.client(
+    "bedrock-runtime",
+    region_name=BEDROCK_REGION,
+)
 
 CONTACT_MESSAGE = (
     "I couldn't find enough information on Ron's website to answer that accurately. "
@@ -29,19 +40,191 @@ def wants_technical_depth(question):
         or "how did you build ronbot" in question_lower
     )
 
+def build_grounded_ai_answer(question, results, history=None):
 
-def build_answer(question, chunks):
-    question_lower = question.lower()
+    """Use Bedrock to formulate an answer from retrieved website evidence."""
 
-    # Dog breed guardrail.
-    if "breed" in question_lower:
-        return (
-            "Ron's website tells me that his dogs are called Thor and Loki, "
-            "but it doesn't say what breed they are. "
-            "Please use the Contact page if you'd like to ask Ron directly."
+    if history is None:
+
+        history = []
+
+    evidence = "\n\n".join(
+
+        f"Source: {chunk.get('source_url', 'Unknown')}\n"
+
+        f"Content: {chunk.get('text', '')}"
+
+        for _, chunk in results
+    )
+    recent_history = []
+
+    for turn in history[-6:]:
+
+        if not isinstance(turn, dict):
+
+            continue
+
+        role = turn.get("role")
+
+        content = turn.get("content", "")
+
+        if role not in {"user", "assistant"}:
+
+            continue
+
+        if not isinstance(content, str):
+
+            continue
+
+        content = content.strip()
+
+        if not content:
+
+            continue
+
+        recent_history.append(f"{role}: {content}")
+
+    conversation_context = "\n".join(recent_history)
+
+    system_prompt = (
+        "You are RonBot, the portfolio assistant for ron-jackson.co.uk. "
+        "Answer the visitor's question using ONLY facts explicitly stated in the website evidence provided. "
+        "Do not use outside knowledge. "
+        "Do not infer, assume, speculate, extrapolate, or say that something is likely, typical, implied, or suggested. "
+        "Do not combine facts from different roles, jobs, projects, or time periods unless the evidence explicitly links them. "
+        "Attribute each fact only to the role or context where it is explicitly stated. "
+	    "If the supplied evidence does not explicitly support a detail, leave that detail out. "
+        "If the evidence contains facts that partially answer the question, answer using those facts only. "
+        "Do not reject an answer merely because the evidence does not provide every possible detail. "
+        "Only say that the website does not provide enough information when the supplied evidence contains no facts that answer the question. "  
+        "Conversation history may be used only to understand what the visitor is referring to in the current question. "
+        "Conversation history is NOT factual evidence and must never be used as a source of facts about Ron. "
+        "All factual claims in the answer must still be explicitly supported by the supplied website evidence. "  
+
+    )
+
+    user_prompt = (
+        f"Recent conversation:\n"
+        f"{conversation_context if conversation_context else 'No previous conversation.'}\n\n"
+        f"Current visitor question:\n{question}\n\n"
+        f"Website evidence:\n{evidence}"
+    )
+
+    try:
+        response = bedrock.converse(
+            modelId=BEDROCK_MODEL_ID,
+            system=[{"text": system_prompt}],
+            messages=[
+                {
+                    "role": "user",
+                    "content": [{"text": user_prompt}],
+                }
+            ],
+            inferenceConfig={
+                "maxTokens": 300,
+                "temperature": 0.1,
+                "topP": 0.9,
+            },
         )
 
-    results = retrieve(question, chunks, limit=3)
+        return response["output"]["message"]["content"][0]["text"].strip()
+
+    except ClientError:
+        return None
+
+def build_answer(question, chunks, history=None):
+
+    if history is None:
+
+        history = []
+
+    text = question.strip()
+
+    question_lower = text.lower()
+
+    # Dog breed guardrail.
+
+    if "breed" in question_lower:
+
+        return (
+
+            "Ron's website tells me that his dogs are called Thor and Loki, "
+
+            "but it doesn't say what breed they are. "
+
+            "Please use the Contact page if you'd like to ask Ron directly."
+
+        )
+
+    retrieval_parts = [question]
+
+    contextual_terms = {
+
+        "he",
+
+        "him",
+
+        "his",
+
+        "there",
+
+        "that",
+
+        "this",
+
+        "they",
+
+        "them",
+
+        "their",
+
+        "it",
+
+    }
+
+    question_words = set(question_lower.replace("?", "").split())
+
+    use_history_for_retrieval = bool(
+
+        question_words.intersection(contextual_terms)
+
+    )
+
+    retrieval_parts = [question]
+
+    if use_history_for_retrieval:
+
+        for turn in history[-4:]:
+
+            if not isinstance(turn, dict):
+
+                continue
+
+            role = turn.get("role")
+
+            content = turn.get("content", "")
+
+            if role not in {"user", "assistant"}:
+
+                continue
+
+            if not isinstance(content, str):
+
+                continue
+
+            content = content.strip()
+
+            if not content:
+
+                continue
+
+            retrieval_parts.append(content[:500])
+    
+
+    retrieval_query = " ".join(retrieval_parts)
+
+    results = retrieve(retrieval_query, chunks, limit=3)
+
     if not results:
 
         return CONTACT_MESSAGE
@@ -163,8 +346,7 @@ def build_answer(question, chunks):
         }
     ):
         if "senior information technology engineer" in text_lower and "redpanda" in text_lower:
-            return (
-                "Ron is currently a Senior Information Technology Engineer at Redpanda."
+            return (                "Ron is currently a Senior Information Technology Engineer at Redpanda."
             )
 
     # Previous employer before Redpanda.
@@ -240,10 +422,24 @@ def build_answer(question, chunks):
                 "HTML/CSS, virtualisation, Active Directory, ServiceNow, Git/GitHub and AI."
             )
 
+  # Use Bedrock for questions that passed retrieval but were not handled by one of RonBot's deterministic answer branches.
+
+    ai_answer = build_grounded_ai_answer(question, results, history=history)
+
+    if ai_answer:
+
+        return ai_answer
+
+    # Safe fallback if the Bedrock call fails.
+
     return (
+
         "I found this on Ron's website:\n\n"
+
         f"{text[:700]}\n\n"
+
         f"Source: {top_chunk.get('source_url', 'Unknown')}"
+
     )
 
 def main():
@@ -258,6 +454,7 @@ def main():
         if question.lower() in {"quit", "exit"}:
             break
 
+        
         print()
         print(build_answer(question, chunks))
         print()

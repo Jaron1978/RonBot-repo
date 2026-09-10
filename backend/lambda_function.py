@@ -13,7 +13,68 @@ LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 logger.setLevel(getattr(logging, LOG_LEVEL, logging.INFO))
 
 chunks = load_knowledge()
+MAX_QUESTION_LENGTH = 1_000
+MAX_HISTORY_TURNS = 6
+MAX_HISTORY_MESSAGE_LENGTH = 1_000
+ALLOWED_HISTORY_ROLES = {"user", "assistant"}
+MAX_REQUEST_BODY_BYTES = 16_000
 
+def validate_request(body):
+    """Validate and sanitise an incoming RonBot request."""
+
+    if not isinstance(body, dict):
+        raise ValueError("Request body must be a JSON object.")
+
+    question = body.get("question", "")
+
+    if not isinstance(question, str):
+        raise ValueError("Question must be text.")
+
+    question = question.strip()
+
+    if not question:
+        raise ValueError("Question is required.")
+
+    if len(question) > MAX_QUESTION_LENGTH:
+        raise ValueError("Question is too long.")
+
+    history = body.get("history", [])
+
+    if not isinstance(history, list):
+        raise ValueError("History must be a list.")
+
+    if len(history) > MAX_HISTORY_TURNS:
+        raise ValueError("Too many history turns.")
+
+    clean_history = []
+
+    for turn in history:
+        if not isinstance(turn, dict):
+            raise ValueError("Each history turn must be an object.")
+
+        role = turn.get("role")
+        content = turn.get("content")
+
+        if role not in ALLOWED_HISTORY_ROLES:
+            raise ValueError("History contains an invalid role.")
+
+        if not isinstance(content, str):
+            raise ValueError("History content must be text.")
+
+        content = content.strip()
+
+        if not content:
+            raise ValueError("History content cannot be empty.")
+
+        if len(content) > MAX_HISTORY_MESSAGE_LENGTH:
+            raise ValueError("History content is too long.")
+
+        clean_history.append({
+            "role": role,
+            "content": content,
+        })
+
+    return question, clean_history
 
 def lambda_handler(event, context):
     """Handle RonBot API requests."""
@@ -30,26 +91,12 @@ def lambda_handler(event, context):
         body = event.get("body", event)
 
         if isinstance(body, str):
+            if len(body.encode("utf-8")) > MAX_REQUEST_BODY_BYTES:
+                raise ValueError("Request body is too large.")
+
             body = json.loads(body)
 
-        question = body.get("question", "").strip()
-        history = body.get("history", [])
-
-        if not question:
-            logger.warning(
-                "ronbot_request_rejected request_id=%s reason=missing_question",
-                request_id
-            )
-
-            return {
-                "statusCode": 400,
-                "headers": {
-                    "Content-Type": "application/json"
-                },
-                "body": json.dumps({
-                    "error": "Question is required."
-                }),
-            }
+        question, history = validate_request(body)
 
         answer = build_answer(question, chunks, history=history)
 
@@ -74,7 +121,7 @@ def lambda_handler(event, context):
             }),
         }
 
-    except (json.JSONDecodeError, AttributeError) as error:
+    except (json.JSONDecodeError, AttributeError, ValueError) as error:
         duration_ms = round(
             (time.perf_counter() - start_time) * 1000,
             2

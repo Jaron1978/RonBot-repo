@@ -1,0 +1,2 @@
+# Required to import the Lambda's Bedrock client during local tests.
+boto3>=1.42.97,<2.0.0

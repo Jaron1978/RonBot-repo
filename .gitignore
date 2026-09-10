@@ -8,3 +8,5 @@ ronbot-lambda.zip
 
 # Local backup files
 *.bak
+
+.venv/

@@ -108,7 +108,9 @@ fetch("https://9jf25kxi10.execute-api.eu-west-2.amazonaws.com/ask", {
 })
   .then((response) => {
     if (!response.ok) {
-      throw new Error("RonBot API request failed.");
+      const error = new Error("RonBot API request failed.");
+      error.status = response.status;
+      throw error;
     }
 
     return response.json();
@@ -121,9 +123,11 @@ fetch("https://9jf25kxi10.execute-api.eu-west-2.amazonaws.com/ask", {
   .catch((error) => {
     thinkingMessage.remove();
 
-    addBotMessage(
-      "RonBot is having trouble connecting right now. Please try again shortly."
-    );
+    const errorMessage = error.status === 429
+      ? "RonBot is receiving a lot of requests right now. Please wait a moment and try again."
+      : "RonBot is having trouble connecting right now. Please try again shortly.";
+
+    addBotMessage(errorMessage);
 
     setThinking(false);
 

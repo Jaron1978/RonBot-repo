@@ -200,15 +200,6 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 
 ➡️ **Next:** RON-15 — Security Controls.
 
-## RON-14 — Conversation Context
-
-RON-14 enables RonBot to use a small, validated window of recent conversation to understand natural follow-up questions without weakening its grounding boundary.
-
-- Recent turns are filtered to recognised roles and non-empty text before they can be used.
-- Only the most recent turns are included, with a tighter subset used when resolving contextual follow-ups for retrieval.
-- Conversation history can clarify what a visitor is referring to, but it is never factual evidence.
-- Every factual claim must remain explicitly supported by newly retrieved website content; unsupported questions retain the Contact-page fallback.
-
 ## RON-01 — Requirements and knowledge boundary
 
 RON-01 established the core requirements and safety boundary for RonBot.
@@ -426,6 +417,15 @@ The production response flow now combines deterministic retrieval and safeguards
 The Contact-page fallback remains in place when retrieval cannot find sufficient website evidence.
 
 RON-13 therefore adds generative AI without changing RonBot's fundamental rule: the portfolio website remains the canonical source of truth.
+
+## RON-14 — Conversation Context
+
+RON-14 enables RonBot to use a small, validated window of recent conversation to understand natural follow-up questions without weakening its grounding boundary.
+
+- Recent turns are filtered to recognised roles and non-empty text before they can be used.
+- Only the most recent turns are included, with a tighter subset used when resolving contextual follow-ups for retrieval.
+- Conversation history can clarify what a visitor is referring to, but it is never factual evidence.
+- Every factual claim must remain explicitly supported by newly retrieved website content; unsupported questions retain the Contact-page fallback.
 
 ## 🗺️ Roadmap
 

@@ -158,38 +158,14 @@ Added adaptive answer depth so general visitors receive concise portfolio answer
 **🔌 RON-11 — RonBot API & Frontend Integration**
 Deployed the RonBot backend to AWS Lambda, exposed it through an Amazon API Gateway HTTP API using `POST /ask`, connected the browser frontend to the live endpoint, configured CORS, and validated grounded responses, fallback behaviour and frontend error handling.
 
-### RON-12 — Serverless Backend Hardening & Observability
-Hardened the deployed AWS backend for production-readiness:
+📈 RON-12 — Serverless Backend Hardening & Observability
+Hardened the deployed AWS Lambda backend with structured logging, request IDs, duration tracking, safe error handling, configurable log levels, CloudWatch visibility, least-privilege IAM review and live API regression testing.
 
-- Added structured Lambda application logging.
-- Added AWS request IDs and request-duration measurements.
-- Added safe `400` and `500` API error handling.
-- Added configurable `LOG_LEVEL` environment configuration.
-- Verified CloudWatch visibility without logging visitor questions or answers.
-- Reviewed Lambda IAM permissions for least-privilege execution.
-- Validated memory, timeout and cold/warm execution performance.
-- Completed live API regression testing for supported, unsupported and malformed requests.
+🧠 RON-13 — AI Model Integration
+Integrated Amazon Nova Micro through Amazon Bedrock into the production response path, using retrieved website evidence to generate grounded answers while preserving deterministic safeguards, least-privilege model access and the Contact-page fallback.
 
-### RON-13 — AI Model Integration
-Integrated Amazon Nova Micro through Amazon Bedrock into RonBot's production response path:
-
-- Validated Amazon Nova Micro in `eu-west-2` using the Bedrock Converse API.
-- Integrated Bedrock locally with the existing website-grounded retrieval pipeline.
-- Supplied retrieved website evidence to Nova Micro rather than unrestricted portfolio questions.
-- Strengthened grounding instructions to prevent unsupported inference and cross-role fact mixing.
-- Preserved deterministic answer branches and the Contact-page fallback.
-- Added targeted retrieval weighting for key technical terms such as AWS.
-- Deployed the Bedrock integration to AWS Lambda.
-- Added least-privilege `bedrock:InvokeModel` permission for Nova Micro.
-- Validated grounded responses through the production AWS path.
-
-RON-13 moves RonBot from deterministic grounded retrieval into AI-generated responses while preserving the website as the canonical knowledge source.
-
-### 🧪 Regression Result
-
-**11 / 11 representative questions passed**
-
-Testing includes both supported questions and deliberately unsupported questions to verify that RonBot does not invent information.
+💬 RON-14 — Conversation Context
+Added bounded conversation-context handling for natural follow-up questions. Previous turns can clarify what a visitor means, but never become factual evidence; every answer remains grounded in newly retrieved website content.
 
 ## 💡 Engineering Lessons
 

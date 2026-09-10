@@ -247,10 +247,10 @@ Managed retrieval will only be introduced where it provides a clear engineering 
 
 This incremental approach allowed retrieval, grounding, API integration, observability and AI model behaviour to be developed and validated independently before being combined.
 
-## Next architectural milestone
+## RON-14 — Conversation Context
 
-**RON-14 — Conversation Context**
+RON-14 is complete. The answer layer accepts a bounded, validated window of recent conversation so that RonBot can resolve references in follow-up questions.
 
-The next stage will allow RonBot to support natural follow-up questions while ensuring conversation history cannot override the website-only grounding boundary.
+Conversation history is explicitly subordinate to the website evidence: it can establish conversational reference, but never acts as a source of facts. Each factual response must still be supported by newly retrieved content from ron-jackson.co.uk; the existing Contact-page fallback remains in place when that evidence is insufficient.
 
-Conversation context will remain subordinate to retrieved website evidence and RonBot's grounding rules.
+**Next architectural milestone:** RON-15 — Security Controls.

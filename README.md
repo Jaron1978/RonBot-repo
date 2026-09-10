@@ -218,10 +218,20 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-11 — RonBot API and frontend integration  
 ✅ RON-12 — Serverless Backend Hardening & Observability
 ✅ RON-13 — AI Model Integration
+✅ RON-14 — Conversation Context
 
-**Current milestone:** Amazon Nova Micro integrated through Amazon Bedrock into the production RonBot response path, using retrieved website evidence for grounded AI-generated answers while preserving deterministic safeguards and safe fallback behaviour.
+**Current milestone:** RON-14 adds bounded conversation context for natural follow-up questions while preserving RonBot's website-only grounding rules.
 
-➡️ **Next:** RON-14 — Conversation Context.
+➡️ **Next:** RON-15 — Security Controls.
+
+## RON-14 — Conversation Context
+
+RON-14 enables RonBot to use a small, validated window of recent conversation to understand natural follow-up questions without weakening its grounding boundary.
+
+- Recent turns are filtered to recognised roles and non-empty text before they can be used.
+- Only the most recent turns are included, with a tighter subset used when resolving contextual follow-ups for retrieval.
+- Conversation history can clarify what a visitor is referring to, but it is never factual evidence.
+- Every factual claim must remain explicitly supported by newly retrieved website content; unsupported questions retain the Contact-page fallback.
 
 ## RON-01 — Requirements and knowledge boundary
 
@@ -449,7 +459,7 @@ Build and deploy a production-ready conversational assistant grounded exclusivel
 
 **Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · grounded AI responses  
 
-**Next →** RON-14 Conversation Context · continued RonBot v1 development
+**Next →** RON-15 Security Controls · continued RonBot v1 development
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 

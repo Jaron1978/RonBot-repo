@@ -30,13 +30,16 @@
 
 ## ✨ Current Capabilities
 
-**🔎 Retrieval:** Searches structured knowledge extracted from the portfolio website  
-**💬 Grounded Answers:** Responds using retrieved website evidence rather than unrestricted knowledge  
-**🧠 AI Responses:** Uses Amazon Nova Micro through Amazon Bedrock to generate natural-language answers from retrieved website evidence
-**🧩 Multi-Chunk Evidence:** Combines relevant information when an answer spans multiple knowledge chunks  
-**🛡️ Safe Fallback:** Unsupported questions are not guessed and direct visitors to the Contact page  
-**🤖 Interaction:** Animated Robot Ron frontend with purposeful thinking states  
-**♿ Accessibility:** Supports `prefers-reduced-motion`
+**🔎 Retrieval:** Searches structured knowledge extracted from the portfolio website<br>
+**💬 Grounded Answers:** Responds using retrieved website evidence rather than unrestricted knowledge<br>
+**🧠 AI Responses:** Uses Amazon Nova Micro through Amazon Bedrock to generate natural-language answers from retrieved website evidence<br>
+**🧩 Multi-Chunk Evidence:** Combines relevant information when an answer spans multiple knowledge chunks<br>
+**🛡️ Safe Fallback:** Unsupported questions are not guessed and direct visitors to the Contact page<br>
+**🛡️ Request Security:** Validates request shape and limits question, conversation-history and request-body size before processing<br>
+**🚦 Rate Protection:** API Gateway applies route-level throttling, with clear browser feedback if a request is limited<br>
+**🧱 Prompt Safety:** Treats visitor questions and conversation history as untrusted input, not instructions<br>
+**🤖 Interaction:** Animated Robot Ron frontend with purposeful thinking states<br>
+**♿ Accessibility:** Supports `prefers-reduced-motion`<br>
 
 ## 🛡️ Grounding Principle
 
@@ -167,6 +170,9 @@ Integrated Amazon Nova Micro through Amazon Bedrock into the production response
 💬 RON-14 — Conversation Context
 Added bounded conversation-context handling for natural follow-up questions. Previous turns can clarify what a visitor means, but never become factual evidence; every answer remains grounded in newly retrieved website content.
 
+🛡️ RON-15 — Security Controls<br>
+Added request validation and payload limits, API Gateway route throttling, prompt-injection safeguards and friendly browser feedback for rate-limited requests. Verified locally and through the deployed Lambda, public API and live website.
+
 ## 💡 Engineering Lessons
 
 Building RonBot's local ingestion and retrieval environment involved troubleshooting several real development issues:
@@ -195,10 +201,11 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-12 — Serverless Backend Hardening & Observability
 ✅ RON-13 — AI Model Integration
 ✅ RON-14 — Conversation Context
+✅ RON-15 — Security Controls
 
-**Current milestone:** RON-14 adds bounded conversation context for natural follow-up questions while preserving RonBot's website-only grounding rules.
+**Current milestone:** RON-15 established request validation, API protection and prompt-injection safeguards for the live RonBot service.
 
-➡️ **Next:** RON-15 — Security Controls.
+➡️ **Next:** RON-16 — Privacy Guardrails.
 
 ## RON-01 — Requirements and knowledge boundary
 
@@ -427,15 +434,37 @@ RON-14 enables RonBot to use a small, validated window of recent conversation to
 - Conversation history can clarify what a visitor is referring to, but it is never factual evidence.
 - Every factual claim must remain explicitly supported by newly retrieved website content; unsupported questions retain the Contact-page fallback.
 
+## RON-15 — Security Controls
+
+**Status:** Complete
+
+RON-15 strengthened the live RonBot service against malformed, oversized and instruction-manipulation requests while keeping normal portfolio conversations responsive.
+
+### Controls delivered
+
+- Validates request structure before processing and rejects empty, malformed or oversized questions.
+- Limits request-body size, conversation-history length and individual history-message length.
+- Accepts only recognised `user` and `assistant` history roles.
+- Treats visitor questions and conversation history as untrusted input, never as instructions that can override RonBot’s grounding and safety rules.
+- Configures API Gateway default-route throttling with a target rate of 2 requests per second and a burst limit of 5.
+- Provides a clear browser message when an API request is rate-limited.
+
+### Validation
+
+- Added 12 local security and request-validation tests.
+- Confirmed invalid requests return a safe HTTP `400` response without exposing implementation details.
+- Deployed the updated Lambda package and verified the public API response.
+- Uploaded the updated frontend script to S3, invalidated CloudFront and confirmed a normal grounded response through the live website.
+
 ## 🗺️ Roadmap
 
 ### 🤖 RonBot v1 — Website-Grounded Assistant
 
 Build and deploy a production-ready conversational assistant grounded exclusively in approved portfolio content.
 
-**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · grounded AI responses  
+**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards
 
-**Next →** RON-15 Security Controls · continued RonBot v1 development
+**Next →** RON-16 Privacy Guardrails · continued RonBot v1 development
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 

@@ -198,13 +198,14 @@ No EC2 instances, always-on containers or Kubernetes clusters are required for R
 - Do not expose AWS credentials in the browser.
 - Use least-privilege IAM permissions for Lambda and related services.
 - Restrict browser access using CORS.
-- Apply request-size and rate controls as the security layer evolves.
+- Validate request structure and apply limits to request-body, question and conversation-history size.
+- Apply API Gateway route-level throttling to protect the public endpoint.
 - Treat retrieved website content as the authoritative knowledge source.
-- Resist attempts to override RonBot's website-only behaviour.
+- Treat visitor questions and conversation history as untrusted input that cannot override RonBot's website-only behaviour.
 - Do not expose system prompts, credentials, secrets or sensitive internal configuration.
 - Do not deliberately log visitor questions or RonBot answers.
 
-Additional production security controls are planned under RON-15.
+RON-15 implemented the current production request-validation, throttling and prompt-injection safeguards. Further privacy controls are planned under RON-16.
 
 ## Planned managed knowledge architecture
 
@@ -253,4 +254,15 @@ RON-14 is complete. The answer layer accepts a bounded, validated window of rece
 
 Conversation history is explicitly subordinate to the website evidence: it can establish conversational reference, but never acts as a source of facts. Each factual response must still be supported by newly retrieved content from ron-jackson.co.uk; the existing Contact-page fallback remains in place when that evidence is insufficient.
 
-**Next architectural milestone:** RON-15 — Security Controls.
+## RON-15 — Security Controls
+
+RON-15 is complete. The public RonBot request path now validates and limits incoming data before retrieval or AI processing begins.
+
+- The Lambda validates JSON request structure, question content, history roles and message sizes.
+- Request bodies, questions and conversation history are bounded to prevent excessive input.
+- Invalid requests return a safe HTTP `400` response without exposing internal details.
+- API Gateway applies default-route throttling with a target rate of 2 requests per second and a burst limit of 5.
+- The Bedrock system instructions treat visitor questions and conversation history as untrusted input, preventing attempts to override RonBot’s grounding boundary.
+- The browser displays a clear retry message if an API request receives HTTP `429`.
+
+**Next architectural milestone:** RON-16 — Privacy Guardrails.

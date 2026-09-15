@@ -3,10 +3,22 @@ import re
 from pathlib import Path
 
 
-KNOWLEDGE_FILE = (
+PACKAGE_KNOWLEDGE_FILE = (
+    Path(__file__).resolve().parent
+    / "knowledge"
+    / "website.jsonl"
+)
+
+LOCAL_KNOWLEDGE_FILE = (
     Path(__file__).resolve().parent.parent
     / "knowledge"
     / "website.jsonl"
+)
+
+KNOWLEDGE_FILE = (
+    PACKAGE_KNOWLEDGE_FILE
+    if PACKAGE_KNOWLEDGE_FILE.exists()
+    else LOCAL_KNOWLEDGE_FILE
 )
 
 MIN_RELEVANCE_SCORE = 3

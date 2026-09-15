@@ -204,8 +204,9 @@ No EC2 instances, always-on containers or Kubernetes clusters are required for R
 - Treat visitor questions and conversation history as untrusted input that cannot override RonBot's website-only behaviour.
 - Do not expose system prompts, credentials, secrets or sensitive internal configuration.
 - Do not deliberately log visitor questions or RonBot answers.
+- Decline private, sensitive and inappropriate requests; discuss only public professional information supported by the portfolio website.
 
-RON-15 implemented the current production request-validation, throttling and prompt-injection safeguards. Further privacy controls are planned under RON-16.
+RON-15 and RON-16 implemented the current production request-validation, throttling, prompt-safety and privacy safeguards. RON-17 — Cost controls & FinOps monitoring is next.
 
 ## Planned managed knowledge architecture
 
@@ -265,4 +266,13 @@ RON-15 is complete. The public RonBot request path now validates and limits inco
 - The Bedrock system instructions treat visitor questions and conversation history as untrusted input, preventing attempts to override RonBot’s grounding boundary.
 - The browser displays a clear retry message if an API request receives HTTP `429`.
 
-**Next architectural milestone:** RON-16 — Privacy Guardrails.
+## RON-16 — Privacy Guardrails
+
+RON-16 is complete. The request path applies deterministic privacy checks before retrieval or Bedrock generation.
+
+- Private, sensitive and inappropriate request patterns receive a consistent, Contact-page privacy response.
+- The Bedrock system prompt prohibits providing, inferring or speculating about private or personal information about Ron.
+- Normal public-professional questions remain available through the existing grounded retrieval path.
+- The Lambda package resolves its approved `knowledge/website.jsonl` file correctly in both local development and the deployed runtime.
+
+**Next architectural milestone:** RON-17 — Cost controls & FinOps monitoring.

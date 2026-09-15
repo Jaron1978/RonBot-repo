@@ -38,6 +38,7 @@
 **🛡️ Request Security:** Validates request shape and limits question, conversation-history and request-body size before processing<br>
 **🚦 Rate Protection:** API Gateway applies route-level throttling, with clear browser feedback if a request is limited<br>
 **🧱 Prompt Safety:** Treats visitor questions and conversation history as untrusted input, not instructions<br>
+**🔒 Privacy Guardrails:** Declines private, sensitive and inappropriate requests while keeping RonBot focused on public professional information<br>
 **🤖 Interaction:** Animated Robot Ron frontend with purposeful thinking states<br>
 **♿ Accessibility:** Supports `prefers-reduced-motion`<br>
 
@@ -173,6 +174,9 @@ Added bounded conversation-context handling for natural follow-up questions. Pre
 🛡️ RON-15 — Security Controls<br>
 Added request validation and payload limits, API Gateway route throttling, prompt-injection safeguards and friendly browser feedback for rate-limited requests. Verified locally and through the deployed Lambda, public API and live website.
 
+🔒 RON-16 — Privacy Guardrails<br>
+Added deterministic protection for private, sensitive and inappropriate questions before retrieval or AI generation. Strengthened the AI instructions to use only public professional information, added regression tests, and verified the controls locally, in Lambda and through the public API.
+
 ## 💡 Engineering Lessons
 
 Building RonBot's local ingestion and retrieval environment involved troubleshooting several real development issues:
@@ -202,10 +206,12 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-13 — AI Model Integration
 ✅ RON-14 — Conversation Context
 ✅ RON-15 — Security Controls
+✅ RON-16 — Privacy Guardrails
 
-**Current milestone:** RON-15 established request validation, API protection and prompt-injection safeguards for the live RonBot service.
+**Current milestone:** RON-17 is establishing production AWS and AI cost monitoring, budget controls and a practical operating-cost baseline.
 
-➡️ **Next:** RON-16 — Privacy Guardrails.
+➡️ **Next:** RON-18 — Test question set.
+
 
 ## RON-01 — Requirements and knowledge boundary
 
@@ -455,6 +461,26 @@ RON-15 strengthened the live RonBot service against malformed, oversized and ins
 - Confirmed invalid requests return a safe HTTP `400` response without exposing implementation details.
 - Deployed the updated Lambda package and verified the public API response.
 - Uploaded the updated frontend script to S3, invalidated CloudFront and confirmed a normal grounded response through the live website.
+
+## 🔒 RON-16 — Privacy Guardrails
+
+**Status:** Complete
+
+RON-16 ensures RonBot stays within Ron’s public professional portfolio information and declines private, sensitive or inappropriate requests.
+
+### Controls delivered
+
+- Detects defined private, sensitive and inappropriate request patterns before retrieval or AI generation.
+- Returns a polite privacy response that directs legitimate enquiries to the Contact page.
+- Strengthens the Bedrock system instructions: RonBot must not provide, infer or speculate about private or personal information about Ron.
+- Keeps normal public-professional questions available.
+
+### Validation
+
+- Added privacy regression tests; the complete backend suite passes 16 tests.
+- Verified the deployed Lambda returns the privacy response for a home-location question.
+- Verified the public API returns HTTP `200` with the privacy response while a normal current-role question still returns the grounded Redpanda answer.
+- Corrected the Lambda package’s knowledge-file path so the production archive loads its approved website knowledge correctly.
 
 ## 🗺️ Roadmap
 

@@ -193,6 +193,17 @@ The knowledge corpus remains small and locally structured, avoiding unnecessary 
 
 No EC2 instances, always-on containers or Kubernetes clusters are required for RonBot v1.
 
+## RON-17 — Cost Controls & FinOps Monitoring
+
+RON-17 adds practical cost governance to the production AWS account while preserving RonBot’s serverless, usage-based architecture.
+
+- Cost Explorer established an approximate recurring account baseline of $2.85 per month, excluding a one-off annual registrar charge.
+- Two stopped legacy EC2 test instances and their unused gp2 EBS volumes were retired in Europe (Paris) and Europe (Ireland), removing approximately $1.81 per month of recurring storage cost before tax.
+- Recovery snapshots were created before deletion and are retained temporarily for review.
+- AWS Budgets provides notification-only alerts at $5 monthly spend, with 85% actual, 100% forecast and 100% actual thresholds.
+- AWS Cost Anomaly Detection monitors all AWS services and sends immediate SNS email alerts for anomalies of $1 or more.
+- No budget or anomaly alert is configured to stop or alter resources automatically.
+
 ## Security principles
 
 - Do not expose AWS credentials in the browser.
@@ -206,7 +217,7 @@ No EC2 instances, always-on containers or Kubernetes clusters are required for R
 - Do not deliberately log visitor questions or RonBot answers.
 - Decline private, sensitive and inappropriate requests; discuss only public professional information supported by the portfolio website.
 
-RON-15 and RON-16 implemented the current production request-validation, throttling, prompt-safety and privacy safeguards. RON-17 — Cost controls & FinOps monitoring is next.
+RON-15 and RON-16 implemented the current production request-validation, throttling, prompt-safety and privacy safeguards. RON-17 added the current budget and cost-anomaly monitoring guardrails.
 
 ## Planned managed knowledge architecture
 
@@ -275,4 +286,4 @@ RON-16 is complete. The request path applies deterministic privacy checks before
 - Normal public-professional questions remain available through the existing grounded retrieval path.
 - The Lambda package resolves its approved `knowledge/website.jsonl` file correctly in both local development and the deployed runtime.
 
-**Next architectural milestone:** RON-17 — Cost controls & FinOps monitoring.
+**Next milestone:** RON-18 — Test question set.

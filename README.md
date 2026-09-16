@@ -207,10 +207,9 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-14 — Conversation Context
 ✅ RON-15 — Security Controls
 ✅ RON-16 — Privacy Guardrails
+✅ RON-17 — Cost Controls & FinOps Monitoring
 
-**Current milestone:** RON-17 is establishing production AWS and AI cost monitoring, budget controls and a practical operating-cost baseline.
-
-➡️ **Next:** RON-18 — Test question set.
+**Next milestone:** RON-18 — Test question set.
 
 
 ## RON-01 — Requirements and knowledge boundary
@@ -482,15 +481,37 @@ RON-16 ensures RonBot stays within Ron’s public professional portfolio informa
 - Verified the public API returns HTTP `200` with the privacy response while a normal current-role question still returns the grounded Redpanda answer.
 - Corrected the Lambda package’s knowledge-file path so the production archive loads its approved website knowledge correctly.
 
+## 📊 RON-17 — Cost Controls & FinOps Monitoring
+
+**Status:** Complete
+
+RON-17 establishes lightweight cost visibility and alerting for RonBot’s AWS account without adding always-on infrastructure or automated shutdown actions.
+
+### Controls delivered
+
+- Reviewed Cost Explorer data and established a normal account baseline of approximately $2.85 per month, excluding a one-off annual registrar charge in July.
+- Retired two stopped legacy EC2 test instances in Europe (Paris) and Europe (Ireland).
+- Removed two unused gp2 EBS volumes created for those test environments, eliminating approximately $1.81 per month of recurring storage cost before tax; recovery snapshots were created first and retained temporarily for review.
+- Added a $5 monthly AWS Budget with alerts at 85% actual spend, 100% forecast spend and 100% actual spend.
+- Created an AWS-managed Cost Anomaly Detection monitor for all AWS services.
+- Configured immediate anomaly alerts through an SNS topic and confirmed email delivery, with a $1 anomaly threshold.
+- Confirmed that RonBot’s current API Gateway, Lambda and Bedrock usage has no material cost at the present scale.
+
+### Operating approach
+
+- Review Cost Explorer monthly and investigate unexpected changes by service and region.
+- Treat the budget and anomaly alerts as notification-only guardrails; no automatic resource shutdowns are configured.
+- Review and remove the temporary legacy-volume snapshots after 30 days if recovery is no longer required.
+
 ## 🗺️ Roadmap
 
 ### 🤖 RonBot v1 — Website-Grounded Assistant
 
 Build and deploy a production-ready conversational assistant grounded exclusively in approved portfolio content.
 
-**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards
+**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards · privacy guardrails · cost monitoring
 
-**Next →** RON-16 Privacy Guardrails · continued RonBot v1 development
+**Next →** RON-18 Test question set · continued RonBot v1 development
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 

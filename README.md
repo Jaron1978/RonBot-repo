@@ -177,6 +177,9 @@ Added request validation and payload limits, API Gateway route throttling, promp
 🔒 RON-16 — Privacy Guardrails<br>
 Added deterministic protection for private, sensitive and inappropriate questions before retrieval or AI generation. Strengthened the AI instructions to use only public professional information, added regression tests, and verified the controls locally, in Lambda and through the public API.
 
+📊 RON-17 — Cost Controls & FinOps Monitoring<br>
+Established a monthly AWS cost baseline, retired legacy test resources after recovery snapshots, and added AWS Budget plus Cost Anomaly Detection alerts for ongoing production monitoring.
+
 ## 💡 Engineering Lessons
 
 Building RonBot's local ingestion and retrieval environment involved troubleshooting several real development issues:

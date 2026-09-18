@@ -204,6 +204,17 @@ RON-17 adds practical cost governance to the production AWS account while preser
 - AWS Cost Anomaly Detection monitors all AWS services and sends immediate SNS email alerts for anomalies of $1 or more.
 - No budget or anomaly alert is configured to stop or alter resources automatically.
 
+## RON-18 — Test Question Set
+
+RON-18 adds a repeatable validation baseline across the local backend, public API and live website.
+
+- The automated backend suite covers validation, prompt safety, privacy guardrails and core visitor journeys.
+- The full suite passes 23 tests.
+- Live API and browser checks confirm grounded answers, safe unknown-information fallbacks, privacy protection and conversation-context behaviour.
+- AI-generated responses are assessed by outcome and safety rather than fragile exact-wording assertions.
+
+**Next milestone:** RON-19 — Grounding & hallucination tests.
+
 ## Security principles
 
 - Do not expose AWS credentials in the browser.
@@ -285,5 +296,3 @@ RON-16 is complete. The request path applies deterministic privacy checks before
 - The Bedrock system prompt prohibits providing, inferring or speculating about private or personal information about Ron.
 - Normal public-professional questions remain available through the existing grounded retrieval path.
 - The Lambda package resolves its approved `knowledge/website.jsonl` file correctly in both local development and the deployed runtime.
-
-**Next milestone:** RON-18 — Test question set.

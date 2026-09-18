@@ -180,6 +180,9 @@ Added deterministic protection for private, sensitive and inappropriate question
 📊 RON-17 — Cost Controls & FinOps Monitoring<br>
 Established a monthly AWS cost baseline, retired legacy test resources after recovery snapshots, and added AWS Budget plus Cost Anomaly Detection alerts for ongoing production monitoring.
 
+🧪 RON-18 — Test Question Set<br>
+Created a repeatable question set covering public professional answers, safe fallbacks, privacy protection, conversation context and live API/website validation. Added seven automated regression tests; the full backend suite now passes 23 tests.
+
 ## 💡 Engineering Lessons
 
 Building RonBot's local ingestion and retrieval environment involved troubleshooting several real development issues:
@@ -211,8 +214,9 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-15 — Security Controls
 ✅ RON-16 — Privacy Guardrails
 ✅ RON-17 — Cost Controls & FinOps Monitoring
+✅ RON-18 — Test Question Set
 
-**Next milestone:** RON-18 — Test question set.
+**Next milestone:** RON-19 — Grounding & hallucination tests.
 
 
 ## RON-01 — Requirements and knowledge boundary
@@ -506,15 +510,37 @@ RON-17 establishes lightweight cost visibility and alerting for RonBot’s AWS a
 - Treat the budget and anomaly alerts as notification-only guardrails; no automatic resource shutdowns are configured.
 - Review and remove the temporary legacy-volume snapshots after 30 days if recovery is no longer required.
 
+## 🧪 RON-18 — Test Question Set
+
+**Status:** Complete
+
+RON-18 established a repeatable validation baseline for RonBot’s most important visitor journeys.
+
+### Delivered
+
+- Added `docs/test-question-set.md` with public-professional, unknown-information, privacy, prompt-safety, request-validation and conversation-context scenarios.
+- Added seven automated regression tests in `backend/test_question_set.py`.
+- Kept AI-generated answers outcome-based in tests, avoiding brittle assertions against exact wording.
+
+### Validation
+
+- Full local backend suite: 23 tests passed.
+- Public API checks confirmed an accurate current-role answer, safe unknown-question fallback, privacy response and RonBot summary.
+- Live website testing confirmed the follow-up conversation context works correctly.
+
+### Known follow-up
+
+- The ASOS work-history question safely falls back today because the retrieval scorer does not yet surface the supporting website content. This improvement is scheduled for RON-21.
+
 ## 🗺️ Roadmap
 
 ### 🤖 RonBot v1 — Website-Grounded Assistant
 
 Build and deploy a production-ready conversational assistant grounded exclusively in approved portfolio content.
 
-**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards · privacy guardrails · cost monitoring
+**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards · privacy guardrails · cost monitoring · repeatable local and live validation
 
-**Next →** RON-18 Test question set · continued RonBot v1 development
+**Next →** RON-19 Grounding & hallucination tests · continued RonBot v1 development
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 

@@ -214,15 +214,15 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-09 — Grounded answers & safe fallback  
 ✅ RON-10 — Recruiter & technical answer depth  
 ✅ RON-11 — RonBot API and frontend integration  
-✅ RON-12 — Serverless Backend Hardening & Observability
-✅ RON-13 — AI Model Integration
-✅ RON-14 — Conversation Context
-✅ RON-15 — Security Controls
-✅ RON-16 — Privacy Guardrails
-✅ RON-17 — Cost Controls & FinOps Monitoring
-✅ RON-18 — Test Question Set
-✅ RON-19 — Grounding & Hallucination Validation
-✅ RON-20 — Production QA
+✅ RON-12 — Serverless Backend Hardening & Observability<br>
+✅ RON-13 — AI Model Integration<br>
+✅ RON-14 — Conversation Context<br>
+✅ RON-15 — Security Controls<br>
+✅ RON-16 — Privacy Guardrails<br>
+✅ RON-17 — Cost Controls & FinOps Monitoring<br>
+✅ RON-18 — Test Question Set<br>
+✅ RON-19 — Grounding & Hallucination Validation<br>
+✅ RON-20 — Production QA<br>
 
 **Next milestone:** RON-21 — RonBot experience refinement.
 

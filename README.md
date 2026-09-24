@@ -183,6 +183,12 @@ Established a monthly AWS cost baseline, retired legacy test resources after rec
 🧪 RON-18 — Test Question Set<br>
 Created a repeatable question set covering public professional answers, safe fallbacks, privacy protection, conversation context and live API/website validation. Added seven automated regression tests; the full backend suite now passes 23 tests.
 
+🧭 RON-19 — Grounding & Hallucination Validation<br>
+Created an explicit evidence matrix and grounding-contract tests, then evaluated answers through the public API and live website. RonBot stayed grounded in website evidence, did not mix facts across roles, did not trust false conversation history, and did not disclose private information. Broader work-history retrieval coverage is tracked separately for RON-21.
+
+✅ RON-20 — Production QA<br>
+Completed final production QA across 26 local backend tests, the public API, the live website widget, API Gateway throttling, Lambda health, AWS Budgets and Cost Anomaly Detection. All required checks passed with no production issue identified.
+
 ## 💡 Engineering Lessons
 
 Building RonBot's local ingestion and retrieval environment involved troubleshooting several real development issues:
@@ -215,8 +221,10 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-16 — Privacy Guardrails
 ✅ RON-17 — Cost Controls & FinOps Monitoring
 ✅ RON-18 — Test Question Set
+✅ RON-19 — Grounding & Hallucination Validation
+✅ RON-20 — Production QA
 
-**Next milestone:** RON-19 — Grounding & hallucination tests.
+**Next milestone:** RON-21 — RonBot experience refinement.
 
 
 ## RON-01 — Requirements and knowledge boundary
@@ -530,7 +538,40 @@ RON-18 established a repeatable validation baseline for RonBot’s most importan
 
 ### Known follow-up
 
-- The ASOS work-history question safely falls back today because the retrieval scorer does not yet surface the supporting website content. This improvement is scheduled for RON-21.
+- Broad work-history questions may retrieve only part of the available career evidence. Improving retrieval coverage across varied employment-question phrasings is scheduled for RON-21.
+
+## 🧭 RON-19 — Grounding & Hallucination Validation
+
+**Status:** Complete
+
+RON-19 made RonBot's evidence boundary explicit and tested it through both automated checks and live answer evaluation.
+
+### Delivered
+
+- Added a grounding evidence matrix covering supported answers, unsupported premises, false conversation history and privacy-safe behaviour.
+- Added grounding-contract tests to verify that the Bedrock instructions require explicit website evidence and prohibit cross-role fact mixing.
+- Validated public API and live website behaviour against the grounding scenarios.
+
+### Outcome
+
+The evaluated answers stayed within website evidence, did not invent unsupported professional facts, did not transfer facts between roles, did not treat false conversation history as evidence and did not disclose private information.
+
+Two retrieval-coverage improvements—broad work-history questions and some supported role-detail questions—are tracked for RON-21. They are retrieval follow-ups, not grounding-safety failures.
+
+## ✅ RON-20 — Production QA
+
+**Status:** Complete
+
+RON-20 completed the final v1 production QA pass.
+
+### Validation
+
+- Full local backend suite: 26 tests passed.
+- Public API checks passed for supported questions, safe unknown-information fallback, privacy handling, malformed requests and instruction-like input.
+- Live website checks passed for the welcome state, supported answer, privacy-safe answer and recovery after a deliberately invalid request.
+- API Gateway default throttling was confirmed at burst 5 and rate 2.
+- Lambda monitoring showed 24 invocations, 0 errors and a 100% success rate in the reviewed window.
+- The RonBot budget was healthy; its cost-anomaly monitor and alert subscription were active with no detected anomalies.
 
 ## 🗺️ Roadmap
 
@@ -538,9 +579,9 @@ RON-18 established a repeatable validation baseline for RonBot’s most importan
 
 Build and deploy a production-ready conversational assistant grounded exclusively in approved portfolio content.
 
-**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards · privacy guardrails · cost monitoring · repeatable local and live validation
+**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards · privacy guardrails · cost monitoring · grounding validation · production QA
 
-**Next →** RON-19 Grounding & hallucination tests · continued RonBot v1 development
+**Next →** RON-21 Experience refinement · site-wide availability · accessible character motion · broader work-history retrieval coverage
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 

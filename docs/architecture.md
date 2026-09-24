@@ -213,7 +213,26 @@ RON-18 adds a repeatable validation baseline across the local backend, public AP
 - Live API and browser checks confirm grounded answers, safe unknown-information fallbacks, privacy protection and conversation-context behaviour.
 - AI-generated responses are assessed by outcome and safety rather than fragile exact-wording assertions.
 
-**Next milestone:** RON-19 — Grounding & hallucination tests.
+## RON-19 — Grounding & Hallucination Validation
+
+RON-19 made the answer-evaluation boundary explicit and verified it through automated contract tests, the public API and the live website.
+
+- The grounding evidence matrix defines permitted evidence and pass conditions for supported answers, unknown questions, false premises, conversation history and privacy requests.
+- Contract tests verify that the Bedrock instructions require explicit website evidence, prohibit cross-role fact mixing and treat conversation history as context rather than factual evidence.
+- Live evaluation found no tested hallucination, cross-role fact transfer, false-history adoption or private-information disclosure.
+- Broader work-history retrieval coverage is a RON-21 follow-up, separate from the grounding-safety outcome.
+
+## RON-20 — Production QA
+
+RON-20 completed final end-to-end validation of the live RonBot v1 path.
+
+- The full backend suite passed 26 tests.
+- The public API and live widget passed supported, unknown-information, privacy, malformed-request and instruction-like input checks.
+- API Gateway default-route throttling was confirmed at burst 5 and rate 2.
+- Lambda monitoring showed 24 invocations, 0 errors and a 100% success rate in the reviewed window.
+- The AWS Budget and Cost Anomaly Detection controls were healthy, with no detected anomaly requiring action.
+
+**Next milestone:** RON-21 — RonBot experience refinement.
 
 ## Security principles
 

@@ -4,70 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RonBot Widget Prototype</title>
-  <link rel="stylesheet" href="ronbot.css">
+  <link rel="stylesheet" href="ronbot.css" data-ronbot-styles="true">
 </head>
 <body>
-
-  <div id="ronbot-chat-panel" class="ronbot-chat-panel" aria-hidden="true">
-    <div class="ronbot-chat-header">
-      <div>
-        <strong>RonBot</strong>
-        <span>Website Assistant</span>
-      </div>
-
-      <button
-        id="ronbot-close"
-        class="ronbot-close"
-        type="button"
-        aria-label="Close RonBot chat"
-      >
-        ×
-      </button>
-    </div>
-
-   <div id="ronbot-messages" class="ronbot-chat-messages">
-
-  <div class="ronbot-message ronbot-message-bot">
-
-    Hi, I’m RonBot. Ask me about Ron’s experience, skills, education,
-
-    certifications or projects.
-
-  </div>
-
-</div>
-
-<form id="ronbot-form" class="ronbot-chat-form">
-
-  <input
-
-    id="ronbot-input"
-
-    type="text"
-
-    placeholder="Ask RonBot something..."
-
-    aria-label="Message RonBot"
-
-    autocomplete="off"
-
-  >
-
-  <button type="submit">Send</button>
-
-</form>
-  </div>
-
-  <button
-    id="ronbot-launcher"
-    class="ronbot-launcher"
-    type="button"
-    aria-label="Open RonBot"
-    aria-expanded="false"
-  >
-    <img src="assets/ronbot-production.png" alt="RonBot">
-  </button>
-
-  <script src="ronbot.js"></script>
+  <script src="ronbot.js" defer></script>
 </body>
 </html>

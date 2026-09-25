@@ -31,6 +31,20 @@ class RonBotQuestionSetTests(unittest.TestCase):
         self.assertIn("Python", answer)
         self.assertIn("Linux", answer)
 
+    def test_answers_broad_work_history_question(self):
+        answer = build_answer(
+            "What previous roles has Ron held?",
+            self.chunks,
+        )
+
+        self.assertIn("Nexxen", answer)
+        self.assertIn("Yoti", answer)
+        self.assertIn("William Hill", answer)
+        self.assertIn("ASOS.com", answer)
+        self.assertIn("Genesis Oil & Gas", answer)
+        self.assertIn("Kalamazoo-Reynolds", answer)
+        self.assertIn("Heritage Care", answer)
+
     def test_answers_cloud_certifications(self):
         answer = build_answer(
             "What cloud certifications does Ron have?",

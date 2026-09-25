@@ -404,6 +404,51 @@ def build_answer(question, chunks, history=None):
             return (                "Ron is currently a Senior Information Technology Engineer at Redpanda."
             )
 
+    # Broad work-history questions need evidence from more than one chunk of the
+    # Work Experience page. Keep this concise and only list roles that are
+    # explicitly present in the website knowledge base.
+    if any(
+        phrase in question_lower
+        for phrase in {
+            "previous roles",
+            "work history",
+            "career history",
+            "employment history",
+            "what roles has ron held",
+            "what other roles",
+        }
+    ):
+        all_knowledge_text = " ".join(
+            chunk.get("text", "").lower()
+            for chunk in chunks
+        )
+
+        required_evidence = {
+            "redpanda": "senior information technology engineer",
+            "nexxen": "systems engineer i",
+            "yoti": "it support engineer",
+            "william hill": "remote desktop analyst",
+            "asos.com": "it desktop support",
+            "genesis oil & gas": "it support team analyst",
+            "kalamazoo-reynolds": "site based engineer",
+            "heritage care": "it support helpdesk",
+        }
+
+        if all(
+            employer in all_knowledge_text and role in all_knowledge_text
+            for employer, role in required_evidence.items()
+        ):
+            return (
+                "Ron's website shows a career across IT support, systems engineering, "
+                "cloud infrastructure and technical leadership. His roles include Senior "
+                "and Information Technology Engineer at Redpanda; Systems Engineer I and "
+                "Desktop Support II at Nexxen (formerly Amobee); IT Support Engineer at "
+                "Yoti; Remote Desktop Analyst at William Hill; IT Desktop Support at "
+                "ASOS.com; IT Support Team Analyst at Genesis Oil & Gas Consultants; "
+                "Site Based Engineer at Kalamazoo-Reynolds; and IT Support Helpdesk at "
+                "Heritage Care."
+            )
+
     # Previous employer before Redpanda.
     if any(
         phrase in question_lower

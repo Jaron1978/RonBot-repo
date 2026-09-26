@@ -8,6 +8,7 @@ const WIDGET_ASSET_DIRECTORY = widgetScript?.src
 const RONBOT_IMAGE =
   widgetScript?.dataset.ronbotImage ||
   new URL("ronbot-production.png", WIDGET_ASSET_DIRECTORY).href;
+const MIN_THINKING_DURATION_MS = 700;
 
 function loadRonBotStyles() {
   if (document.querySelector("link[data-ronbot-styles]")) {
@@ -82,6 +83,7 @@ function initialiseRonBot() {
   );
 
   const launcher = document.getElementById("ronbot-launcher");
+  const launcherImage = launcher.querySelector("img");
   const chatPanel = document.getElementById("ronbot-chat-panel");
   const closeButton = document.getElementById("ronbot-close");
   const form = document.getElementById("ronbot-form");
@@ -94,8 +96,10 @@ function initialiseRonBot() {
     launcher.classList.remove("ronbot-greeting");
     void launcher.offsetWidth;
     launcher.classList.add("ronbot-greeting");
+    launcher.setAttribute("aria-label", "RonBot is waving hello");
     greetingTimer = window.setTimeout(() => {
       launcher.classList.remove("ronbot-greeting");
+      launcher.setAttribute("aria-label", "Close RonBot chat");
     }, 900);
   }
 
@@ -113,6 +117,7 @@ function initialiseRonBot() {
     launcher.classList.remove("ronbot-active", "ronbot-greeting");
     chatPanel.setAttribute("aria-hidden", "true");
     launcher.setAttribute("aria-expanded", "false");
+    launcher.setAttribute("aria-label", "Open RonBot");
     launcher.focus();
   }
 
@@ -126,6 +131,11 @@ function initialiseRonBot() {
 
   function setThinking(isThinking) {
     launcher.classList.toggle("ronbot-thinking", isThinking);
+    launcherImage.alt = isThinking ? "RonBot is thinking" : "RonBot";
+    launcher.setAttribute(
+      "aria-label",
+      isThinking ? "RonBot is thinking" : "Close RonBot chat",
+    );
     if (isThinking) {
       launcher.classList.remove("ronbot-greeting");
     }
@@ -162,6 +172,7 @@ function initialiseRonBot() {
     input.value = "";
     messages.scrollTop = messages.scrollHeight;
     setThinking(true);
+    const thinkingStartedAt = performance.now();
 
     const thinkingMessage = document.createElement("div");
     thinkingMessage.classList.add(
@@ -175,6 +186,19 @@ function initialiseRonBot() {
     `;
     messages.appendChild(thinkingMessage);
     messages.scrollTop = messages.scrollHeight;
+
+    function finishThinking(renderResponse) {
+      const remainingTime = Math.max(
+        0,
+        MIN_THINKING_DURATION_MS - (performance.now() - thinkingStartedAt),
+      );
+
+      window.setTimeout(() => {
+        thinkingMessage.remove();
+        renderResponse();
+        setThinking(false);
+      }, remainingTime);
+    }
 
     fetch(API_ENDPOINT, {
       method: "POST",
@@ -190,18 +214,16 @@ function initialiseRonBot() {
         return response.json();
       })
       .then((data) => {
-        thinkingMessage.remove();
-        addBotMessage(data.answer);
-        setThinking(false);
+        finishThinking(() => addBotMessage(data.answer));
       })
       .catch((error) => {
-        thinkingMessage.remove();
-        addBotMessage(
-          error.status === 429
-            ? "RonBot is receiving a lot of requests right now. Please wait a moment and try again."
-            : "RonBot is having trouble connecting right now. Please try again shortly.",
-        );
-        setThinking(false);
+        finishThinking(() => {
+          addBotMessage(
+            error.status === 429
+              ? "RonBot is receiving a lot of requests right now. Please wait a moment and try again."
+              : "RonBot is having trouble connecting right now. Please try again shortly.",
+          );
+        });
         console.error(error);
       });
   });

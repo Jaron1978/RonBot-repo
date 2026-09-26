@@ -220,7 +220,7 @@ RON-19 made the answer-evaluation boundary explicit and verified it through auto
 - The grounding evidence matrix defines permitted evidence and pass conditions for supported answers, unknown questions, false premises, conversation history and privacy requests.
 - Contract tests verify that the Bedrock instructions require explicit website evidence, prohibit cross-role fact mixing and treat conversation history as context rather than factual evidence.
 - Live evaluation found no tested hallucination, cross-role fact transfer, false-history adoption or private-information disclosure.
-- Broader work-history retrieval coverage is a RON-21 follow-up, separate from the grounding-safety outcome.
+- Broader work-history retrieval coverage was addressed in RON-21, separate from the grounding-safety outcome.
 
 ## RON-20 — Production QA
 
@@ -232,7 +232,18 @@ RON-20 completed final end-to-end validation of the live RonBot v1 path.
 - Lambda monitoring showed 24 invocations, 0 errors and a 100% success rate in the reviewed window.
 - The AWS Budget and Cost Anomaly Detection controls were healthy, with no detected anomaly requiring action.
 
-**Next milestone:** RON-21 — RonBot experience refinement.
+## RON-21 — RonBot Experience Refinement
+
+RON-21 completed the site-wide frontend refinement and knowledge refresh that followed production QA.
+
+- The reusable RonBot widget is now available across the portfolio.
+- Idle, greeting and thinking feedback were added with reduced-motion support.
+- The approved website knowledge dataset was regenerated and deployed so live answers reflect the current portfolio.
+- Broader work-history retrieval was validated alongside the 27-test backend suite, public API and live widget.
+
+RON-22 then documented the resulting implementation as the public Project 02 technical case study.
+
+**Next milestone:** RON-23 — RonBot v1 Production Release & External User Testing.
 
 ## Security principles
 

@@ -26,6 +26,9 @@
 - ✅ Browser-to-AWS RonBot integration
 - ✅ Amazon Bedrock AI model integration
 - ✅ Amazon Nova Micro grounded response generation
+- ✅ Site-wide RonBot availability and accessible interaction feedback
+- ✅ Broader website-grounded work-history coverage
+- ✅ Public technical case study for Project 02
 - 🗺️ Managed AWS knowledge architecture planned
 
 ## ✨ Current Capabilities
@@ -189,6 +192,12 @@ Created an explicit evidence matrix and grounding-contract tests, then evaluated
 ✅ RON-20 — Production QA<br>
 Completed final production QA across 26 local backend tests, the public API, the live website widget, API Gateway throttling, Lambda health, AWS Budgets and Cost Anomaly Detection. All required checks passed with no production issue identified.
 
+✨ RON-21 — RonBot Experience Refinement<br>
+Made RonBot available across the portfolio, added subtle idle, greeting and thinking feedback with reduced-motion support, refreshed the website-only knowledge base and improved broad work-history answers across the published career timeline. The complete backend suite passed 27 checks.
+
+📖 RON-22 — Project 02 Portfolio Page<br>
+Expanded the Project 02 page into a public technical case study covering RonBot’s architecture, technology stack, safety controls, engineering challenges, validation approach and outcomes.
+
 ## 💡 Engineering Lessons
 
 Building RonBot's local ingestion and retrieval environment involved troubleshooting several real development issues:
@@ -223,8 +232,10 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-18 — Test Question Set<br>
 ✅ RON-19 — Grounding & Hallucination Validation<br>
 ✅ RON-20 — Production QA<br>
+✅ RON-21 — RonBot Experience Refinement<br>
+✅ RON-22 — Project 02 Portfolio Page<br>
 
-**Next milestone:** RON-21 — RonBot experience refinement.
+**Next milestone:** RON-23 — RonBot v1 Production Release & External User Testing.
 
 
 ## RON-01 — Requirements and knowledge boundary
@@ -536,9 +547,9 @@ RON-18 established a repeatable validation baseline for RonBot’s most importan
 - Public API checks confirmed an accurate current-role answer, safe unknown-question fallback, privacy response and RonBot summary.
 - Live website testing confirmed the follow-up conversation context works correctly.
 
-### Known follow-up
+### Follow-up outcome
 
-- Broad work-history questions may retrieve only part of the available career evidence. Improving retrieval coverage across varied employment-question phrasings is scheduled for RON-21.
+- RON-21 refreshed the approved website knowledge and improved broad work-history coverage across the published career timeline. Further real-world feedback is now tracked through RON-23 external user testing.
 
 ## 🧭 RON-19 — Grounding & Hallucination Validation
 
@@ -556,7 +567,7 @@ RON-19 made RonBot's evidence boundary explicit and tested it through both autom
 
 The evaluated answers stayed within website evidence, did not invent unsupported professional facts, did not transfer facts between roles, did not treat false conversation history as evidence and did not disclose private information.
 
-Two retrieval-coverage improvements—broad work-history questions and some supported role-detail questions—are tracked for RON-21. They are retrieval follow-ups, not grounding-safety failures.
+The identified retrieval-coverage follow-up was addressed in RON-21 through a refreshed knowledge dataset and broader work-history coverage. It was a retrieval improvement, not a grounding-safety failure.
 
 ## ✅ RON-20 — Production QA
 
@@ -573,15 +584,33 @@ RON-20 completed the final v1 production QA pass.
 - Lambda monitoring showed 24 invocations, 0 errors and a 100% success rate in the reviewed window.
 - The RonBot budget was healthy; its cost-anomaly monitor and alert subscription were active with no detected anomalies.
 
+## ✨ RON-21 — RonBot Experience Refinement
+
+**Status:** Complete
+
+- Made the RonBot widget available across the full portfolio rather than only on Project 02.
+- Added idle, greeting and thinking feedback while preserving keyboard controls and reduced-motion support.
+- Refreshed the website-only knowledge dataset and deployed it to Lambda.
+- Improved broad work-history coverage across the published career timeline.
+- Verified the full 27-test backend suite, public API and live widget behaviour.
+
+## 📖 RON-22 — Project 02 Portfolio Page
+
+**Status:** Complete
+
+RON-22 turned the Project 02 delivery record into a public technical case study. It documents the request architecture, technology choices, evidence boundary, safety controls, engineering challenges and production validation, supported by a live RonBot conversation screenshot.
+
+[View the live Project 02 case study →](https://www.ron-jackson.co.uk/project-02.html)
+
 ## 🗺️ Roadmap
 
 ### 🤖 RonBot v1 — Website-Grounded Assistant
 
 Build and deploy a production-ready conversational assistant grounded exclusively in approved portfolio content.
 
-**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards · privacy guardrails · cost monitoring · grounding validation · production QA
+**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards · privacy guardrails · cost monitoring · grounding validation · production QA · site-wide experience refinement · public technical case study
 
-**Next →** RON-21 Experience refinement · site-wide availability · accessible character motion · broader work-history retrieval coverage
+**Next →** RON-23 Production release · external user testing · serious-issue feedback loop
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 

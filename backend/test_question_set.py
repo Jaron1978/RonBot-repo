@@ -5,6 +5,8 @@ os.environ.setdefault("AWS_EC2_METADATA_DISABLED", "true")
 
 from answer import (
     CONTACT_MESSAGE,
+    EMPLOYER_RESPONSES,
+    LONGEST_EMPLOYMENT_MESSAGE,
     PRIVACY_MESSAGE,
     SCOPE_MESSAGE,
     VALUES_MESSAGE,
@@ -74,6 +76,41 @@ class RonBotQuestionSetTests(unittest.TestCase):
         self.assertEqual(answer, WORK_HISTORY_MESSAGE)
         self.assertIn("Genesis Oil & Gas Consultants Ltd", answer)
         self.assertIn("Kalamazoo-Reynolds", answer)
+
+    def test_answers_where_ron_has_worked(self):
+        answer = build_answer("Where has Ron worked?", self.chunks)
+
+        self.assertEqual(answer, WORK_HISTORY_MESSAGE)
+
+    def test_answers_each_published_employer_check(self):
+        questions = {
+            "Has Ron worked at Redpanda?": "redpanda",
+            "Has Ron worked at Nexxen?": "nexxen",
+            "Has Ron worked at Amobee?": "amobee",
+            "Has Ron worked at Yoti?": "yoti",
+            "Has Ron worked at William Hill?": "william hill",
+            "Has Ron worked at ASOS?": "asos",
+            "Has Ron worked at Genesis Oil and Gas?": "genesis oil",
+            "Has Ron worked at Kalamazoo Reynolds?": "kalamazoo",
+            "Has Ron worked at Heritage Care?": "heritage care",
+        }
+
+        for question, employer in questions.items():
+            with self.subTest(question=question):
+                self.assertEqual(
+                    build_answer(question, self.chunks),
+                    EMPLOYER_RESPONSES[employer],
+                )
+
+    def test_answers_longest_period_of_employment(self):
+        answer = build_answer(
+            "What is Ron's longer period of employment?",
+            self.chunks,
+        )
+
+        self.assertEqual(answer, LONGEST_EMPLOYMENT_MESSAGE)
+        self.assertIn("Nexxen", answer)
+        self.assertIn("3 years and 2 months", answer)
 
     def test_answers_values_with_natural_language_wording(self):
         answer = build_answer("What are Ron's values?", self.chunks)

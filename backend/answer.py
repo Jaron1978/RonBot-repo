@@ -52,6 +52,49 @@ WORK_HISTORY_MESSAGE = (
     "- IT Support Helpdesk — Heritage Care, contract (Dec 2010–May 2011)"
 )
 
+LONGEST_EMPLOYMENT_MESSAGE = (
+    "The longest individual role listed on Ron's website is Systems Engineer I at "
+    "Nexxen, from January 2022 to February 2025 — 3 years and 2 months."
+)
+
+EMPLOYER_RESPONSES = {
+    "redpanda": (
+        "Yes. Ron's website lists two roles at Redpanda Data: Information "
+        "Technology Engineer (February 2025–October 2025) and Senior Information "
+        "Technology Engineer (October 2025–present)."
+    ),
+    "nexxen": (
+        "Yes. Ron worked at Nexxen as Desktop Support II from May 2020 to January "
+        "2022, then as Systems Engineer I from January 2022 to February 2025."
+    ),
+    "amobee": (
+        "Yes. Ron's website lists Desktop Support II at Nexxen (formerly Amobee) "
+        "from May 2020 to January 2022."
+    ),
+    "yoti": (
+        "Yes. Ron worked as an IT Support Engineer at Yoti Ltd from March 2018 to May 2020."
+    ),
+    "william hill": (
+        "Yes. Ron worked as a Remote Desktop Analyst at William Hill from September "
+        "2015 to March 2018."
+    ),
+    "asos": (
+        "Yes. Ron worked in IT Desktop Support at ASOS.com from August 2013 to August 2015."
+    ),
+    "genesis oil": (
+        "Yes. Ron worked as an IT Support Team Analyst at Genesis Oil & Gas "
+        "Consultants Ltd from June 2012 to August 2013."
+    ),
+    "kalamazoo": (
+        "Yes. Ron worked as a Site Based Engineer at Kalamazoo-Reynolds from May "
+        "2011 to May 2012."
+    ),
+    "heritage care": (
+        "Yes. Ron worked in IT Support Helpdesk at Heritage Care on a contract from "
+        "December 2010 to May 2011."
+    ),
+}
+
 PRIVACY_PATTERNS = {
     "home address",
     "where does ron live",
@@ -270,6 +313,8 @@ def build_answer(question, chunks, history=None):
                 "previous roles",
                 "what roles has ron held",
                 "what other roles",
+                "where has ron worked",
+                "where did ron work",
                 "summary of ron's work experience",
                 "summary of ron’s work experience",
                 "summary of ron's career",
@@ -286,6 +331,29 @@ def build_answer(question, chunks, history=None):
         )
     ):
         return WORK_HISTORY_MESSAGE
+
+    # Employer checks are short, natural questions that otherwise contain too few
+    # keywords for retrieval to select the relevant career-timeline evidence.
+    if any(
+        phrase in question_lower
+        for phrase in {
+            "has ron worked at",
+            "did ron work at",
+            "has he worked at",
+            "did he work at",
+        }
+    ):
+        for employer, response in EMPLOYER_RESPONSES.items():
+            if employer in question_lower:
+                return response
+
+    # Compare the published dates directly instead of asking the model to infer a
+    # duration from only a small subset of the Work Experience timeline.
+    if (
+        "employment" in question_lower
+        and any(word in question_lower for word in {"longest", "longer"})
+    ):
+        return LONGEST_EMPLOYMENT_MESSAGE
 
     # Dog breed guardrail.
 

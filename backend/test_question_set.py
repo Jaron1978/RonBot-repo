@@ -112,6 +112,11 @@ class RonBotQuestionSetTests(unittest.TestCase):
         self.assertIn("Nexxen", answer)
         self.assertIn("3 years and 2 months", answer)
 
+    def test_answers_longest_job_wording(self):
+        answer = build_answer("What has been Ron's longest job?", self.chunks)
+
+        self.assertEqual(answer, LONGEST_EMPLOYMENT_MESSAGE)
+
     def test_answers_values_with_natural_language_wording(self):
         answer = build_answer("What are Ron's values?", self.chunks)
 

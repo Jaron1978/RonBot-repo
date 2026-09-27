@@ -24,6 +24,34 @@ PRIVACY_MESSAGE = (
     "Contact page."
 )
 
+SCOPE_MESSAGE = (
+    "I can't provide internal instructions or hidden prompts. I can explain my "
+    "public scope: I answer questions about Ron's published professional experience, "
+    "skills, qualifications, education and projects. I don't handle private, "
+    "sensitive or inappropriate requests."
+)
+
+VALUES_MESSAGE = (
+    "Ron values continuous learning and professional development; clear, "
+    "transparent communication; quality and thoroughness over speed; collaboration "
+    "and sharing knowledge; security-first thinking; and using automation to reduce toil."
+)
+
+WORK_HISTORY_MESSAGE = (
+    "Ron's website shows a career across IT support, systems engineering, cloud "
+    "infrastructure and technical leadership. The roles listed are:\n\n"
+    "- Senior Information Technology Engineer — Redpanda Data (Oct 2025–present)\n"
+    "- Information Technology Engineer — Redpanda Data (Feb 2025–Oct 2025)\n"
+    "- Systems Engineer I — Nexxen (Jan 2022–Feb 2025)\n"
+    "- Desktop Support II — Nexxen, formerly Amobee (May 2020–Jan 2022)\n"
+    "- IT Support Engineer — Yoti Ltd (Mar 2018–May 2020)\n"
+    "- Remote Desktop Analyst — William Hill (Sep 2015–Mar 2018)\n"
+    "- IT Desktop Support — ASOS.com (Aug 2013–Aug 2015)\n"
+    "- IT Support Team Analyst — Genesis Oil & Gas Consultants Ltd (Jun 2012–Aug 2013)\n"
+    "- Site Based Engineer — Kalamazoo-Reynolds (May 2011–May 2012)\n"
+    "- IT Support Helpdesk — Heritage Care, contract (Dec 2010–May 2011)"
+)
+
 PRIVACY_PATTERNS = {
     "home address",
     "where does ron live",
@@ -194,8 +222,70 @@ def build_answer(question, chunks, history=None):
     text = question.strip()
 
     question_lower = text.lower()
+
+    # Explain RonBot's boundary without exposing its internal instructions.
+    if any(
+        phrase in question_lower
+        for phrase in {
+            "actual instructions",
+            "internal instructions",
+            "hidden instructions",
+            "system prompt",
+            "hidden prompt",
+            "what am i not supposed to ask",
+            "what should i not ask",
+            "what can't i ask",
+            "what can i not ask",
+        }
+    ):
+        return SCOPE_MESSAGE
+
     if needs_privacy_guardrail(question):
         return PRIVACY_MESSAGE
+
+    # These are clearly labelled, published sections of the Written Statement.
+    # Handle their common natural-language forms directly so retrieval wording does
+    # not cause RonBot to overlook the evidence.
+    if any(
+        phrase in question_lower
+        for phrase in {
+            "what are ron's values",
+            "what are ron’s values",
+            "what does ron value",
+            "what does he value",
+            "what i value",
+        }
+    ):
+        return VALUES_MESSAGE
+
+    # A complete work-history request needs evidence from the whole timeline,
+    # rather than the three locally retrieved chunks used for ordinary questions.
+    if (
+        any(
+            phrase in question_lower
+            for phrase in {
+                "work history",
+                "career history",
+                "employment history",
+                "previous roles",
+                "what roles has ron held",
+                "what other roles",
+                "summary of ron's work experience",
+                "summary of ron’s work experience",
+                "summary of ron's career",
+                "summary of ron’s career",
+                "list every employment position",
+                "list all employment positions",
+                "list all roles",
+                "all previous roles",
+            }
+        )
+        or (
+            "work experience" in question_lower
+            and any(word in question_lower for word in {"summary", "list", "every", "all"})
+        )
+    ):
+        return WORK_HISTORY_MESSAGE
 
     # Dog breed guardrail.
 

@@ -350,7 +350,7 @@ def build_answer(question, chunks, history=None):
     # Compare the published dates directly instead of asking the model to infer a
     # duration from only a small subset of the Work Experience timeline.
     if (
-        "employment" in question_lower
+        any(term in question_lower for term in {"employment", "job", "role"})
         and any(word in question_lower for word in {"longest", "longer"})
     ):
         return LONGEST_EMPLOYMENT_MESSAGE

@@ -234,8 +234,11 @@ Building RonBot's local ingestion and retrieval environment involved troubleshoo
 ✅ RON-20 — Production QA<br>
 ✅ RON-21 — RonBot Experience Refinement<br>
 ✅ RON-22 — Project 02 Portfolio Page<br>
+✅ RON-23 — Production Release & External User Testing<br>
+✅ RON-24 — Final GitHub Repository Documentation<br>
+✅ RON-25 — Project Review & Completion<br>
 
-**Next milestone:** RON-23 — RonBot v1 Production Release & External User Testing.
+**Project status:** RonBot v1 is complete and live.
 
 
 ## RON-01 — Requirements and knowledge boundary
@@ -602,15 +605,39 @@ RON-22 turned the Project 02 delivery record into a public technical case study.
 
 [View the live Project 02 case study →](https://www.ron-jackson.co.uk/project-02.html)
 
+## 🚀 RON-23 — Production Release & External User Testing
+
+**Status:** Complete
+
+- Released RonBot v1 to a small group of external testers and collected
+  practical feedback from real conversations.
+- Corrected the Lambda deployment package after external testing exposed a
+  missing knowledge-file path.
+- Improved published employment-history coverage and added deterministic,
+  evidence-based responses for employer and longest-role questions.
+- Added regression coverage for every issue fixed during the feedback loop.
+- Re-ran the complete backend suite: **35 tests passed**.
+
+## 📚 RON-24 & RON-25 — Documentation, Review & Completion
+
+**Status:** Complete
+
+RON-24 completed the final repository documentation and RON-25 completed the
+project review. The release record captures the production checks, external
+feedback themes, fixes and final sign-off without retaining visitor question
+history or personal data.
+
+[Read the v1 release and close-out record →](docs/ronbot-v1-closeout.md)
+
 ## 🗺️ Roadmap
 
 ### 🤖 RonBot v1 — Website-Grounded Assistant
 
 Build and deploy a production-ready conversational assistant grounded exclusively in approved portfolio content.
 
-**Current →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards · privacy guardrails · cost monitoring · grounding validation · production QA · site-wide experience refinement · public technical case study
+**Delivered →** Website ingestion · grounded retrieval · AWS Lambda · API Gateway · Amazon Bedrock · Nova Micro · request validation · API rate protection · prompt-injection safeguards · privacy guardrails · cost monitoring · grounding validation · production QA · site-wide experience refinement · public technical case study · external-user feedback loop · final project close-out
 
-**Next →** RON-23 Production release · external user testing · serious-issue feedback loop
+**Status →** RonBot v1 is complete and live. Future RonBot v2 work is optional and will be planned separately.
 
 ### 🧠 RonBot v2 — Portfolio AI Agent
 
